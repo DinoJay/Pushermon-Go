@@ -1,5 +1,7 @@
 import React from 'react';
 
+import mapboxgl from 'mapbox-gl';
+import Pusher from 'pusher-js';
 import './global_styles/app.scss';
 // import Comp from './components/Comp';
 
@@ -9,6 +11,7 @@ import './global_styles/app.scss';
 // import style from './global_styles/App.scss';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam1hdXNoYWciLCJhIjoiY2l2ODkyaDl1MDAwdTJvbnlmbHdvODM0MiJ9.rLkNA-rO4xq0O4_xIeqXVg';
+
 const pusher = new Pusher('cc379270b195d3a20931', {
   cluster: 'eu',
   encrypted: true
@@ -29,7 +32,8 @@ function createSprite(data) {
   monsterIcon.classList.add('pokemon');
   return monsterIcon;
 }
-function update(map, source, location) {
+
+function update(map, coordinates) {
   function isInMapBounds(lngLat) {
     const lng = parseFloat(lngLat[0]);
     const lat = parseFloat(lngLat[1]);
@@ -57,20 +61,23 @@ function update(map, source, location) {
     }
   }
 
-  source.setData({
-    type: 'FeatureCollection',
-    features: [{
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: location
-      }
-    }]
-  });
+  const point = {
+    type: 'Point',
+    coordinates
+  };
+
+  // TODO: animation
+  // function animateMarker(timestamp) {
+  //   map.getSource('user').setData(point);
+  //   requestAnimationFrame(animateMarker);
+  // }
+
+  // animateMarker(0);
+  map.getSource('user').setData(point);
 
   map.resize().setMaxBounds();
 
-  map.flyTo({ center: location });
+  map.flyTo({ center: coordinates });
 
   const mapBounds = map.getBounds();
   const geoHashes = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng,
@@ -97,11 +104,6 @@ function update(map, source, location) {
   });
 }
 
-// function initialLoad(location) {
-//   return { map, source };
-// }
-
-
 class Map extends React.Component {
   static propTypes() {
     return {
@@ -121,51 +123,68 @@ class Map extends React.Component {
       dragPan: false
     });
 
-
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log('current pos', position);
-      const coords = [position.coords.longitude, position.coords.latitude];
-
-      const source = new mapboxgl.GeoJSONSource({
-        data: {
-          type: 'FeatureCollection',
-          features: [{
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: coords
-            }
-          }]
-        }
-      });
-      map.setCenter(coords);
-
+    const point = {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [0, 0]
+      }
+    };
       // map.on('zoomend', update);
       // map.on('rotateend', update);
-      map.on('load', () => {
-        map.addSource('me', source);
-        map.addLayer({
-          id: 'me',
-          type: 'symbol',
-          source: 'me',
-          layout: {
-            'icon-image': 'circle-15'
-          }
-        });
+    map.on('load', () => {
+      map.addSource('user', { type: 'geojson', data: point });
 
-        map.on('click', (e) => {
-          const center = map.getCenter();
-          console.log('click', e, 'center', center);
-          update(map, source, [e.lngLat.lng, e.lngLat.lat]);
-      // initialLoad([e.lngLat.lng, e.lngLat.lat]);
-        // var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
-        // map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-        });
+      map.addLayer({
+        id: 'user',
+        type: 'circle',
+        source: 'user',
+        paint: {
+          'circle-radius': 18,
+          'circle-color': 'Brown',
+          'circle-opacity': 0.4
+        }
+      });
 
-        navigator.geolocation.watchPosition((pos) => {
-          update(map, source, [pos.coords.longitude, pos.coords.latitude]);
-        });
-    // hideLoading();
+      map.addLayer({
+        id: '3d-buildings',
+        source: 'composite',
+        'source-layer': 'building',
+        filter: ['==', 'extrude', 'true'],
+        type: 'fill-extrusion',
+        minzoom: 15,
+        paint: {
+          'fill-extrusion-color': '#aaa',
+          'fill-extrusion-height': {
+            type: 'identity',
+            property: 'height'
+          },
+          'fill-extrusion-base': {
+            type: 'identity',
+            property: 'min_height'
+          },
+          'fill-extrusion-opacity': 0.6
+        }
+      });
+
+      // Brussels lngLat TODO: remove
+      map.setCenter([4.3517, 50.8503]);
+
+      // TODO: delete, only for testing
+      map.on('click', (e) => {
+        update(map, [e.lngLat.lng, e.lngLat.lat]);
+      });
+
+      navigator.geolocation.watchPosition((pos) => {
+        map.setCenter([pos.coords.longitude, pos.coords.latitude]);
+        update(map, [pos.coords.longitude, pos.coords.latitude]);
+      });
+
+
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const coordinates = [pos.coords.longitude, pos.coords.latitude];
+        update(map, coordinates);
+        // hideLoading();
       });
     }, () => {}, { enableHighAccuracy: true });
 
@@ -185,7 +204,7 @@ class Map extends React.Component {
   render() {
     return (
       <div
-        // className={style.Comp}
+        id={this.props.id}
         width={this.props.width}
         height={this.props.height}
       />
@@ -195,15 +214,8 @@ class Map extends React.Component {
 
 Map.defaultProps = {
   width: 1000,
-  height: 1000
+  height: 1000,
+  id: 'map'
 };
 
 export default Map;
-
-// export default () => (
-//   <div>
-//     <h1>It Works!</h1>
-//     <p>This React project just works including <span className="redBg">module</span> local styles.</p>
-//     <p>Example Comp!</p>
-//   </div>
-//   );

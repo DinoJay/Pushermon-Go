@@ -5,7 +5,7 @@
   "main": "''",
   "scripts": {
     "build": "webpack --config webpack.production.config.js --progress --profile --colors",
-    "start": "webpack-dev-server --progress --profile --colors",
+    "start": "webpack-dev-server --progress --profile --colors --https",
     "lint": "eslint --ext js --ext jsx src || exit 0"
   },
   "repository": {
@@ -22,6 +22,7 @@
     "json-loader": "^0.5.4",
     "mapbox-gl": "^0.30.0",
     "node-sass": "^3.13.0",
+    "pusher-js": "^4.0.0",
     "react": "15.4.1",
     "react-dom": "15.4.1",
     "sass-loader": "^4.0.2"
