@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "tunnel": "./ngrok http -bind-tls=true -subdomain=tickle 8000"
+    "tunnel": "./ngrok http -subdomain=tickle 8000"
   },
   "author": "",
   "license": "ISC",

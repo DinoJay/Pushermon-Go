@@ -147,7 +147,7 @@ server.start((err) => {
           //   hp: pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat,
           //   types: pokemon.types.map(type => type.type.name[0] + type.type.name.substring(1))
     }
-    setTimeout(nextEncounter, 3000);
+    setTimeout(nextEncounter, 5000);
   }
 
   nextEncounter();
