@@ -1,13 +1,21 @@
+const path = require('path');
+
 module.exports = [
+  {
+    enforce: 'pre',
+    test: /\.js$/,
+    loader: 'remove-flow-types-loader',
+    include: [/node_modules\/mapbox-gl\/js/]
+  },
   {
     test: /\.jsx?$/,
     exclude: /(node_modules|bower_components|public)/,
-    loader: 'babel'
+    loader: 'babel-loader'
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
     exclude: /(node_modules|bower_components)/,
-    loader: 'file'
+    loader: 'file-loader'
   },
   {
     test: /\.(woff|woff2)$/,

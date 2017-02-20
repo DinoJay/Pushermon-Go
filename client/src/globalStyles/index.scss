@@ -1,0 +1,9 @@
+$btn-font-weight:bold !default;
+@import '~bootstrap/scss/bootstrap.scss';
+// $btn-line-height:                1.25 !default;
+#me {
+    height: 32px;
+    width: 32px;
+    background-size: 100% 100%;
+    background-image: url(icon_me.png);
+}
