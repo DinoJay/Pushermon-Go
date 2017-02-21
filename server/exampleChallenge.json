@@ -1,0 +1,34 @@
+{
+  "challenge": {
+    "type": "quiz",
+    "content": [
+      {
+        "question": "What purpose did the Bourse serve back in the past?",
+        "answers": [
+          {
+            "text": "It was a stock exchange market",
+            "correct": true
+          },
+          {
+            "text": "It was an amusement park for elderly people",
+            "correct": false
+          },
+          {
+            "text": "It used to the biggest fish market in northern europe",
+            "correct": false
+          },
+          {
+            "text": "It was the previous location of the Delirium Bar",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  "coords": [
+    4.348762,
+    50.847482
+  ]
+}
+
+
