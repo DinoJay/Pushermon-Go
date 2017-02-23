@@ -1,18 +1,20 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import App from './App.jsx';
+import { makeRoutes } from './Routes';
 
-import './globalStyles/index.scss';
+const Routes = makeRoutes;
 
-render(<AppContainer><App /></AppContainer>, document.querySelector('#app'));
+// import './globalStyles/index.scss';
+
+render(<AppContainer><Routes /></AppContainer>, document.querySelector('#app'));
 
 if (module && module.hot) {
-  module.hot.accept('./App.jsx', () => {
-    const App = require('./App.jsx').default;
+  module.hot.accept('./Routes.jsx', () => {
+    const Routes = require('./Routes.jsx').makeRoutes;
     render(
       <AppContainer>
-        <App />
+        <Routes />
       </AppContainer>,
       document.querySelector('#app')
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './styles/ChallengeCard.scss';
+import styles from './ChallengeCard.scss';
 
 export default () => (
   <div className={styles.card}>

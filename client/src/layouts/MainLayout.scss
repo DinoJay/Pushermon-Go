@@ -1,0 +1,32 @@
+$btn-font-weight:bold !default;
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~colors.css/css/colors.css';
+
+// $btn-line-height:                1.25 !default;
+
+.tickle-navbar-overlay {
+  position: absolute;
+  z-index: 10;
+  // background-color: orange;
+  width: 100%;
+}
+
+.tickle-thumbnail {
+  @extend .img-thumbnail;
+  // min-height: 20px;
+  max-height: 50px;
+  max-width: 50px;
+}
+
+
+// .tickle-navbar-overlay button{
+//   background-color: white;
+// }
+
+#me {
+  height: 32px;
+  width: 32px;
+  background-size: 100% 100%;
+  background-image: url(icon_me.png);
+}
+

@@ -1,4 +1,4 @@
-# react-webpack-babel
+# TICKLE Starter Kit
 Simple React Webpack Babel Starter Kit
 
 Tired of complicated starters with 200MB of dependencies which are hard to understand and modify?
@@ -41,33 +41,6 @@ Open the web browser to `http://localhost:8888/`
 npm run build
 ```
 
-### Nginx Config
-
-Here is an example Nginx config:
-```
-server {
-	# ... root and other options
-
-	gzip on;
-	gzip_http_version 1.1;
-	gzip_types text/plain text/css text/xml application/javascript image/svg+xml;
-
-	location / {
-		try_files $uri $uri/ /index.html;
-	}
-
-	location ~ \.html?$ {
-		expires 1d;
-	}
-
-	location ~ \.(svg|ttf|js|css|svgz|eot|otf|woff|jpg|jpeg|gif|png|ico)$ {
-		access_log off;
-		log_not_found off;
-		expires max;
-	}
-}
-```
-
 ### Eslint
 There is a .eslint.yaml config for eslint ready with React plugin.
 To use it, you need to install additional dependencies though:
@@ -86,5 +59,7 @@ npm run lint
 * styles having /src/ in their absolute path are considered part of the application and exported as local css modules.
 * other styles are considered global styles used by many components and are included in the css bundle directly.
 
-### Contribute
-Please contribute to the project if you know how to make it better, including this README :)
+
+### Todo
+* cartoonize profile pics
+

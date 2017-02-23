@@ -1,7 +1,44 @@
+import React from 'react';
+// import Immutable from 'immutable';
+
+import MapGL from 'react-map-gl';
+// import rasterTileStyle from 'raster-tile-style';
+import Pusher from 'pusher-js';
+import ngeohash from 'ngeohash';
+
+import ChallengeCard from './components/challenges/ChallengeCard';
+
+import ChallengesOverlay from './components/map-layers/ChallengesOverlay';
+import UserMarkerOverlay from './components/map-layers/UserMarkerOverlay';
+
+// const tileSource = '//tile.stamen.com/toner/{z}/{x}/{y}.png';
+
+// const mapStyle = rasterTileStyle([tileSource]);
+
+
+const accessToken = 'pk.eyJ1Ijoiam1hdXNoYWciLCJhIjoiY2l2ODkyaDl1MDAwdTJvbnlmbHdvODM0MiJ9.rLkNA-rO4xq0O4_xIeqXVg';
+
+const pusher = new Pusher('cc379270b195d3a20931', {
+  cluster: 'eu',
+  encrypted: true
+});
+
+function isInMapBounds(coords, mapBounds) {
+  const lng = parseFloat(coords.longitude);
+  const lat = parseFloat(coords.latitude);
+      // const mapBounds = map.getBounds();
+  const boundsCheck = (lng > mapBounds.getWest() && lng < mapBounds.getEast()
+      && lat < mapBounds.getNorth() && lat > mapBounds.getSouth());
+
+  if (boundsCheck) {
+    return true;
+  }
+  return false;
+}
+
 // import React from 'react';
 //
 // import mapboxgl from 'mapbox-gl';
-// import Pusher from 'pusher-js';
 // import MapGL from 'react-map-gl';
 //
 //
@@ -11,7 +48,6 @@
 //
 // // import * as d3 from 'd3';
 //
-// import ChallengeCard from './components/ChallengeCard';
 // // import Comp from './components/Comp';
 //
 // // import React from 'react';
@@ -21,10 +57,6 @@
 //
 // const accessToken = 'pk.eyJ1Ijoiam1hdXNoYWciLCJhIjoiY2l2ODkyaDl1MDAwdTJvbnlmbHdvODM0MiJ9.rLkNA-rO4xq0O4_xIeqXVg';
 //
-// const pusher = new Pusher('cc379270b195d3a20931', {
-//   cluster: 'eu',
-//   encrypted: true
-// });
 //
 //
 // function createSprite(data) {
@@ -44,79 +76,6 @@
 //
 // function update(map, coordinates) {
 //   console.log('update');
-//   function isInMapBounds(lngLat) {
-//     const lng = parseFloat(lngLat[0]);
-//     const lat = parseFloat(lngLat[1]);
-//     const mapBounds = map.getBounds();
-//     const boundsCheck = (lng > mapBounds.getWest() && lng < mapBounds.getEast()
-//       && lat < mapBounds.getNorth() && lat > mapBounds.getSouth());
-//
-//     if (boundsCheck) {
-//       return true;
-//     }
-//     return false;
-//   }
-//
-//   function encounter(data) {
-//     const marker = new mapboxgl.Marker(createSprite(data))
-//       .setLngLat(data.coordinates)
-//       .addTo(map);
-//
-//     console.log('Encounter!');
-//     // If encounter is within visible map
-//     if (isInMapBounds(data.coordinates)) {
-//       navigator.vibrate(1000);
-//     } else {
-//       // TODO: Show arrow indicators
-//     }
-//   }
-//
-//   const point = {
-//     type: 'Point',
-//     coordinates
-//   };
-//
-//   // TODO: animation
-//   // function animateMarker(timestamp) {
-//   //   map.getSource('user').setData(point);
-//   //   requestAnimationFrame(animateMarker);
-//   // }
-//
-//   // animateMarker(0);
-//   // map.getSource('user').setData(point);
-//
-//   map.resize().setMaxBounds();
-//
-//   map.flyTo({ center: coordinates });
-//   const me = document.getElementById('me');
-//   console.log('me', me);
-//   const markerMe = new mapboxgl.Marker(me)
-//             .setLngLat(coordinates)
-//             .addTo(map);
-//
-//   const mapBounds = map.getBounds();
-//   const geoHashes = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng,
-//     mapBounds._ne.lat, mapBounds._ne.lng, 6);
-//
-//   console.log('geoHashes', geoHashes);
-//
-//   let currentGeoHashes = [];
-//   currentGeoHashes.forEach((geohash) => {
-//     if (!geoHashes.includes(geohash)) {
-//         // Unsubscribe from any hash we've moved out of
-//       pusher.unsubscribe(geohash);
-//       console.log('Unsubscribe');
-//     }
-//   });
-//   currentGeoHashes = currentGeoHashes.filter(geohash => geoHashes.includes(geohash));
-//   geoHashes.forEach((geohash) => {
-//     if (!currentGeoHashes.includes(geohash)) {
-//         // Subscribe to any new hashes we've moved into
-//       console.log('Subscribe', geohash);
-//       currentGeoHashes.push(geohash);
-//       pusher.subscribe(geohash).bind('encounter', encounter);
-//     }
-//   });
 // }
 //
 //
@@ -225,32 +184,6 @@
 //   }
 //   render() {
 //     return (
-//       <div>
-//         <div id="me" />
-//         <div
-//           className="modal fade" id="myModal" tabIndex="-1" role="dialog"
-//           aria-labelledby="exampleModalLabel" aria-hidden="true"
-//         >
-//           <div className="modal-dialog" role="document">
-//             <div className="modal-content">
-//               <div className="modal-header">
-//                 <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-//                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-//                   <span aria-hidden="true">&times;</span>
-//                 </button>
-//               </div>
-//               <div className="modal-body">
-//                 <ChallengeCard />
-//               </div>
-//               <div className="modal-footer">
-//                 <button type="button" className="btn btn-secondary" data-dismiss="modal">
-//                   Close
-//                 </button>
-//                 <button type="button" className="btn btn-primary">Save changes</button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
 //         <MapGL
 //           width={700}
 //           height={450}
@@ -274,31 +207,41 @@
 // };
 
 
-const accessToken = 'pk.eyJ1Ijoiam1hdXNoYWciLCJhIjoiY2l2ODkyaDl1MDAwdTJvbnlmbHdvODM0MiJ9.rLkNA-rO4xq0O4_xIeqXVg';
-
-import Immutable from 'immutable';
-import React from 'react';
-import r from 'r-dom';
-
-import MapGL from 'react-map-gl';
-import rasterTileStyle from 'raster-tile-style';
-
-import locations from 'example-cities';
-
-import ChallengesOverlay from './components/map/ChallengesOverlay';
-import UserMarkerOverlay from './components/map/UserMarkerOverlay';
-
-const tileSource = '//tile.stamen.com/toner/{z}/{x}/{y}.png';
-
-const mapStyle = rasterTileStyle([tileSource]);
-
-
 // class Comp extends React.Component {
 //
 // }
 
+
+const Modal = () => (
+  <div
+    className="modal fade" id="myModal" tabIndex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true"
+  >
+    <div className="modal-dialog" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <ChallengeCard />
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                  Close
+                </button>
+          <button type="button" className="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export default class App extends React.Component {
   constructor(props) {
+    console.log('willMount', props);
     super(props);
     this.state = {
       viewport: {
@@ -307,13 +250,14 @@ export default class App extends React.Component {
         latitude: 0,
         longitude: 0,
         // mapStyle: Immutable.fromJS(mapStyle),
-        zoom: 1
+        zoom: 20
       },
-      userPos: { latitude: 0, longitude: 0 }
+      challenges: []
     };
   }
 
   componentDidMount() {
+    console.log('didMount');
     const self = this;
     window.addEventListener('resize', () => {
       this.setState({
@@ -324,18 +268,36 @@ export default class App extends React.Component {
       });
     });
 
-    navigator.geolocation.watchPosition((pos) => {
+    const watchPosId = navigator.geolocation.watchPosition((pos) => {
       // map.setCenter([pos.coords.longitude, pos.coords.latitude]);
-      this.setState({ userPos: pos.coords });
-    });
+      console.log('watch pos', pos.coords);
+      const newViewPort = Object.assign({}, self.state.viewport, {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude
+      });
 
-    navigator.geolocation.getCurrentPosition((pos) => {
-      this.setState({ userPos: pos.coords });
-    }, () => {}, { enableHighAccuracy: true });
+      self.setState({ viewport: newViewPort });
+    }, d => console.log('error watch pos', d), { timeout: 1000000 });
+
+    const curPosId = navigator.geolocation.getCurrentPosition((pos) => {
+      console.log('cur pos', pos.coords);
+      const newViewPort = Object.assign({}, self.state.viewport, {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude
+      });
+
+      self.setState({ viewport: newViewPort });
+    },
+      d => console.log('error cur pos', d),
+      { maximumAge: 0, enableHighAccuracy: true });
+
+    this.setState({ curPosId, watchPosId });
+  }
+
+  componentDidUpdate() {
   }
 
   _onChangeViewport(viewport) {
-    console.log('viewport', viewport);
     const vp = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -343,40 +305,98 @@ export default class App extends React.Component {
       longitude: viewport.longitude,
       zoom: viewport.zoom
     };
-    this.setState({ viewport: Object.assign({}, this.state.viewport, vp) });
+    // TODO: expose less
+    const mapBounds = viewport.map.getBounds();
+    //
+    const geoHashes = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng,
+    mapBounds._ne.lat, mapBounds._ne.lng, 6);
+
+    let currentGeoHashes = [];
+    currentGeoHashes.forEach((geohash) => {
+      if (!geoHashes.includes(geohash)) {
+        // Unsubscribe from any hash we've moved out of
+        pusher.unsubscribe(geohash);
+        console.log('Unsubscribe');
+      }
+    });
+    currentGeoHashes = currentGeoHashes
+      .filter(geohash => geoHashes.includes(geohash));
+
+    // const challenges = [];
+    geoHashes.forEach((geohash) => {
+      if (!currentGeoHashes.includes(geohash)) {
+        // Subscribe to any new hashes we've moved into
+        currentGeoHashes.push(geohash);
+        pusher.subscribe(geohash)
+          .bind('encounter', (d) => {
+            if (isInMapBounds(d.coords, mapBounds)) {
+              navigator.vibrate(1000);
+              const ch = {
+                latitude: parseFloat(d.coords.latitude),
+                longitude: parseFloat(d.coords.longitude)
+              };
+              this.setState({ challenges: this.state.challenges.concat([ch]) });
+              console.log('encounter');
+            } else {
+      // TODO: Show arrow indicators
+            }
+          });
+      }
+    });
+
+    this.setState({
+      viewport: vp
+    });
   }
 
-  _userMove(pos) {
-    console.log('pos', pos);
-    const viewport = this.state.viewport;
-    viewport.longitude = pos.lng;
-    viewport.latitude = pos.lat;
+  _userMove(pos, point) {
+    const viewport = Object.assign({}, this.state.viewport, {
+      latitude: pos.lat,
+      longitude: pos.lng
+    });
+
     this.setState({
-      userPos: { latitude: viewport.latitude, longitude: viewport.longitude },
       viewport
     });
   }
 
+
+  // componentWillUnmount() {
+  //   console.log('unmount', this);
+  //
+  // }
+
+  componentWillUnmount() {
+    console.log('unmount', this);
+
+    window.addEventListener('resize', () => {});
+    navigator.geolocation.watchPosition(() => {}, () => {}, { timeout: 1 });
+    navigator.geolocation.getCurrentPosition(() => {}, () => {}, { timeout: 1 });
+    console.log('curPosId', this.state);
+    // console.log('watchPosId', this.state.watchPosId);
+    navigator.geolocation.clearWatch(this.state.watchPosId);
+  }
+
   render() {
     return (
-      <div>
+      <div key={`${location.pathname}${location.search}`}>
+        <Modal />
+
         <MapGL
           {...this.state.viewport}
           mapboxApiAccessToken={accessToken}
           onChangeViewport={this._onChangeViewport.bind(this)}
-          latitude={this.state.userPos.latitude}
-          longitude={this.state.userPos.longitude}
           onClick={this._userMove.bind(this)}
           isDragging={false}
           startDragLngLat={null}
         >
           <ChallengesOverlay
             {...this.state.viewport}
-            locations={locations}
+            locations={this.state.challenges}
           />
           <UserMarkerOverlay
             {...this.state.viewport}
-            location={this.state.userPos}
+            location={{ latitude: this.state.viewport.latitude, longitude: this.state.viewport.longitude }}
             id={'exampleUser'}
           />
         </MapGL>
