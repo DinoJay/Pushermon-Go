@@ -5,7 +5,7 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 import MainLayout from './layouts/MainLayout';
 import App from './App';
 import Challenge from './components/challenges/ChallengeCard';
-import TodoApp from './ChallengeCRUD';
+import Journal from './ChallengeCRUD';
 // import NotFound from './containers/NotFound/NotFound';
 
 // debug('lego:routes');
@@ -28,7 +28,7 @@ export const routes = {
     path: '/journal/',
     label: 'Journal',
     title: `${siteTitle} - Todo`,
-    component: TodoApp
+    component: Journal
   }
 };
 
@@ -36,6 +36,7 @@ const indexRoute = route => Object.assign({}, route, { path: null });
 
 export const LinkHelper = ({ to, ...props }) => {
   if (!routes[to]) throw new Error(`Route to '${to}' not found`);
+  console.log('props', to);
   return (
     <Link to={routes[to].path} {...props}>
       { props.children || routes[to].label }

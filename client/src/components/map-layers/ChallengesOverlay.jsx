@@ -6,29 +6,31 @@ import DIVOverlay from './div.react';
 export default class ChalllengesOverlay extends React.Component {
   static propTypes() {
     return {
-      locations: React.PropTypes.array.isRequired
+      // locations: React.PropTypes.array.isRequired,
+      cardClickHandler: React.PropTypes.func.isRequired
     };
   }
 
-  onClick() {
-    window.location.href = `https://en.wikipedia.org${location.wiki}`;
-  }
 
   redraw(opt) {
     const self = this;
-    const scale = 0.5; // self.zoom;
+    // console.log('self', self);
+    // const scale = 0.5; // self.zoom;
     return (
-      this.locations.map((location, i) => {
-        const pixel = opt.project([location.longitude, location.latitude]);
+      this.challenges.map((ch, i) => {
+        const pixel = opt.project([ch.coords.longitude, ch.coords.latitude]);
         return (
           <button
             key={i}
             className={styles.card}
             style={{
-              transform: `translate(${pixel[0]}px, ${pixel[1]}px)scale(${scale}, ${scale}`
+              transform: `translate(${pixel[0]}px, ${pixel[1]}px)`
             }}
-            onClick={self.onClick}
-          />);
+            onClick={() => self.cardClickHandler(ch)}
+          >
+            <i className="fa fa-fw fa-question fa-2x" />
+          </button>
+        );
       })
 
     );

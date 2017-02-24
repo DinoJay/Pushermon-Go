@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../actions';
+import { addChallenge } from '../actions';
 
-let AddTodo = ({ dispatch }) => {
+let AddChallenge = ({ dispatch }) => {
   let input;
 
   return (
@@ -13,7 +13,7 @@ let AddTodo = ({ dispatch }) => {
           if (!input.value.trim()) {
             return;
           }
-          dispatch(addTodo(input.value));
+          dispatch(addChallenge(input.value));
           input.value = '';
         }}
       >
@@ -29,6 +29,6 @@ let AddTodo = ({ dispatch }) => {
     </div>
   );
 };
-AddTodo = connect()(AddTodo);
+AddChallenge = connect()(AddChallenge);
 
-export default AddTodo;
+export default AddChallenge;

@@ -36,208 +36,21 @@ function isInMapBounds(coords, mapBounds) {
   return false;
 }
 
-// import React from 'react';
-//
-// import mapboxgl from 'mapbox-gl';
-// import MapGL from 'react-map-gl';
-//
-//
-// import 'bootstrap/dist/js/bootstrap';
-//
-// import ExampleOverlay from './components/map/Main';
-//
-// // import * as d3 from 'd3';
-//
-// // import Comp from './components/Comp';
-//
-// // import React from 'react';
-// // import ReactDOM from 'react-dom';
-//
-// // import style from './global_styles/App.scss';
-//
-// const accessToken = 'pk.eyJ1Ijoiam1hdXNoYWciLCJhIjoiY2l2ODkyaDl1MDAwdTJvbnlmbHdvODM0MiJ9.rLkNA-rO4xq0O4_xIeqXVg';
-//
-//
-//
-// function createSprite(data) {
-//   const monsterIcon = new Image();
-//   monsterIcon.src = data.sprite;
-//   monsterIcon.height = 50;
-//   monsterIcon.width = 50;
-//   monsterIcon.dataset.expires = data.expires;
-//   // monsterIcon.dataset.pokemon = data.id;
-//   // monsterIcon.dataset.name = data.name[0].toUpperCase() + data.name.substring(1);
-//   // monsterIcon.dataset.hp = data.hp;
-//   // monsterIcon.dataset.types = data.types.join(', ');
-//   // monsterIcon.classList.add('sprite');
-//   monsterIcon.classList.add('game');
-//   return monsterIcon;
-// }
-//
-// function update(map, coordinates) {
-//   console.log('update');
-// }
-//
-//
-// class Map extends React.Component {
-//   static propTypes() {
-//     return {
-//       width: React.PropTypes.number.isRequired,
-//       height: React.PropTypes.number.isRequired
-//     };
-//   }
-//   componentDidMount() {
-//     const map = new mapboxgl.Map({
-//       container: 'map',
-//       style: 'mapbox://styles/jmaushag/cixls68am001d2rqsyzmlv0g3',
-//       zoom: 20,
-//       minZoom: 18,
-//       maxZoom: 20,
-//       dragPan: false,
-//       pitch: 60, // pitch in degrees
-//       bearing: -60 // bearing in degrees
-//     });
-//
-//     const point = {
-//       type: 'Feature',
-//       geometry: {
-//         type: 'Point',
-//         coordinates: [0, 0]
-//       }
-//     };
-//       // map.on('zoomend', update);
-//       // map.on('rotateend', update);
-//     map.on('load', () => {
-//       map.addSource('user', { type: 'geojson', data: point });
-//
-//       map.addLayer({
-//         id: 'user',
-//         type: 'circle',
-//         source: 'user',
-//         paint: {
-//           'circle-radius': 18,
-//           'circle-color': 'Brown',
-//           'circle-opacity': 0.4
-//         }
-//       });
-//
-//       map.addLayer({
-//         id: '3d-buildings',
-//         source: 'composite',
-//         'source-layer': 'building',
-//         filter: ['==', 'extrude', 'true'],
-//         type: 'fill-extrusion',
-//         minzoom: 15,
-//         paint: {
-//           'fill-extrusion-color': '#aaa',
-//           'fill-extrusion-height': {
-//             type: 'identity',
-//             property: 'height'
-//           },
-//           'fill-extrusion-base': {
-//             type: 'identity',
-//             property: 'min_height'
-//           },
-//           'fill-extrusion-opacity': 0.6
-//         }
-//       });
-//
-//       // Brussels lngLat TODO: remove
-//       map.setCenter([4.3517, 50.8503]);
-//
-//       // TODO: delete, only for testing
-//       map.on('click', (e) => {
-//         update(map, [e.lngLat.lng, e.lngLat.lat]);
-//       });
-//
-//       navigator.geolocation.watchPosition((pos) => {
-//         map.setCenter([pos.coords.longitude, pos.coords.latitude]);
-//         update(map, [pos.coords.longitude, pos.coords.latitude]);
-//       });
-//
-//
-//       navigator.geolocation.getCurrentPosition((pos) => {
-//         const coordinates = [pos.coords.longitude, pos.coords.latitude];
-//         update(map, coordinates);
-//       }, () => {}, { enableHighAccuracy: true });
-//     });
-//
-//
-//   // Remove all expired sprites
-//     // (function removeExpired() {
-//     //   const now = (new Date()).getTime();
-//     //   const allSprites = document.querySelectorAll('[data-expires]');
-//     //   for (const sprite of allSprites) {
-//     //     if (sprite.dataset.expires < now) {
-//     //       sprite.remove();
-//     //     }
-//     //   }
-//     //   requestAnimationFrame(removeExpired);
-//     // }());
-//
-//     document.querySelector('body').addEventListener('click', (event) => {
-//       if (event.target.classList.contains('game')) {
-//         jQuery('.modal').modal('show');
-//       }
-//     });
-//     // modal.querySelector('.modal-close a').addEventListener('click', hide);
-//   }
-//   render() {
-//     return (
-//         <MapGL
-//           width={700}
-//           height={450}
-//           latitude={4.3517}
-//           longitude={-50.8503}
-//           zoom={11}
-//           mapStyle={'mapbox://styles/jmaushag/cixls68am001d2rqsyzmlv0g3'}
-//           mapboxApiAccessToken={accessToken}
-//         >
-//           <ExampleOverlay />
-//         </MapGL>
-//       </div>
-//     );
-//   }
-// }
-//
-// Map.defaultProps = {
-//   width: 1000,
-//   height: 1000,
-//   id: 'map'
-// };
-
-
-// class Comp extends React.Component {
-//
-// }
-
-
-const Modal = () => (
+const Modal = ({ challenge }) => (
   <div
     className="modal fade" id="myModal" tabIndex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" aria-hidden="true"
   >
     <div className="modal-dialog" role="document">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div className="modal-body">
-          <ChallengeCard />
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" data-dismiss="modal">
-                  Close
-                </button>
-          <button type="button" className="btn btn-primary">Save changes</button>
-        </div>
-      </div>
+      {challenge}
     </div>
   </div>
 );
+
+// Modal.propTypes = {
+//   challenge: React.PropTypes.object.isRequired
+// };
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -252,7 +65,8 @@ export default class App extends React.Component {
         // mapStyle: Immutable.fromJS(mapStyle),
         zoom: 20
       },
-      challenges: []
+      challenges: [],
+      challenge: null
     };
   }
 
@@ -297,6 +111,12 @@ export default class App extends React.Component {
   componentDidUpdate() {
   }
 
+  cardClickHandler(d) {
+    console.log('cardClickHandler', d);
+    jQuery('.modal').modal('show');
+    this.setState({ challenge: <ChallengeCard {...d} /> });
+  }
+
   _onChangeViewport(viewport) {
     const vp = {
       width: window.innerWidth,
@@ -329,13 +149,18 @@ export default class App extends React.Component {
         currentGeoHashes.push(geohash);
         pusher.subscribe(geohash)
           .bind('encounter', (d) => {
+            console.log('subscribe');
             if (isInMapBounds(d.coords, mapBounds)) {
               navigator.vibrate(1000);
-              const ch = {
-                latitude: parseFloat(d.coords.latitude),
-                longitude: parseFloat(d.coords.longitude)
-              };
-              this.setState({ challenges: this.state.challenges.concat([ch]) });
+              console.log('d.coords', d.coords);
+              // const ch = {
+              //   latitude: parseFloat(d.coords.latitude),
+              //   longitude: parseFloat(d.coords.longitude)
+              // };
+              d.latitude = parseFloat(d.coords.latitude);
+              d.longitude = parseFloat(d.coords.longitude);
+
+              this.setState({ challenges: this.state.challenges.concat([d]) });
               console.log('encounter');
             } else {
       // TODO: Show arrow indicators
@@ -380,7 +205,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div key={`${location.pathname}${location.search}`}>
-        <Modal />
+        <Modal challenge={this.state.challenge} />
 
         <MapGL
           {...this.state.viewport}
@@ -392,7 +217,8 @@ export default class App extends React.Component {
         >
           <ChallengesOverlay
             {...this.state.viewport}
-            locations={this.state.challenges}
+            cardClickHandler={this.cardClickHandler.bind(this)}
+            challenges={this.state.challenges}
           />
           <UserMarkerOverlay
             {...this.state.viewport}

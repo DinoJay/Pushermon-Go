@@ -21,6 +21,8 @@
     "d3": "^4.5.0",
     "dsv-loader": "^2.0.0",
     "example-cities": "0.0.0",
+    "font-awesome": "^4.7.0",
+    "font-awesome-webpack": "0.0.4",
     "immutable": "^3.8.1",
     "json-loader": "^0.5.4",
     "mapbox-gl": "^0.32.1",

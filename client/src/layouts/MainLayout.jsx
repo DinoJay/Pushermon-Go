@@ -3,12 +3,10 @@ import DocumentMeta from 'react-document-meta';
 
 // import { findRoute } from '../utils';
 import { routes, LinkHelper } from '../Routes';
-import 'bootstrap/dist/js/bootstrap';
+
 
 import userPic from './user.png';
-
 import './MainLayout.scss';
-
 
 export default class MainLayout extends Component {
 
@@ -28,7 +26,6 @@ export default class MainLayout extends Component {
     // const cfg = findRoute(location.pathname);
     // const route = cfg || routes.homepage;
     const route = routes.App;
-    console.log('location', location);
     const navLinkProps = {
       className: 'layout__nav-link',
       activeClassName: 'layout__nav-link--selected'
@@ -56,6 +53,9 @@ export default class MainLayout extends Component {
                 <li className="nav-item active">
                   <LinkHelper to="App" {...navLinkProps} />
                 </li>
+                <li className="nav-item active">
+                  <LinkHelper to="Challenge" {...navLinkProps} />
+                </li>
               </ul>
             </div>
           </nav>
@@ -64,7 +64,7 @@ export default class MainLayout extends Component {
           {children}
         </div>
         <footer className="layout__footer">
-          Hosted at <a href="http://github.com/peter-mouland/react-lego">github.com/DinoJay</a>
+          Hosted at <a href="http://github.com/DinoJay">github.com/DinoJay</a>
         </footer>
       </div>
     );

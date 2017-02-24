@@ -1,3 +1,9 @@
+@import '~bootstrap/scss/bootstrap.scss';
+.challengeImgTop {
+  @extend .card-img-top;
+  height: 200px;
+}
+
 .card {
   // width: 400px;
   // height: 800px;
