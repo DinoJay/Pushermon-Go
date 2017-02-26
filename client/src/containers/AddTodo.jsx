@@ -6,7 +6,7 @@ let AddChallenge = ({ dispatch }) => {
   let input;
 
   return (
-    <div>
+    <div className="row">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -23,7 +23,7 @@ let AddChallenge = ({ dispatch }) => {
           }}
         />
         <button type="submit">
-          Add Todo
+          Add Challenge
         </button>
       </form>
     </div>

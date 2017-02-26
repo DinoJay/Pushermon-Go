@@ -1,19 +1,21 @@
 @import '~bootstrap/scss/bootstrap.scss';
+
 .challengeImgTop {
   @extend .card-img-top;
   height: 200px;
 }
 
-.card {
-  // width: 400px;
-  // height: 800px;
-  padding: 25px;
-  border: 10px solid goldenRod;
-  border-radius: 20px;
-  font-family: Arial;
-  position: relative;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
+// .card {
+//   // width: 400px;
+//   // height: 800px;
+//   padding: 25px;
+//   border: 10px solid goldenRod;
+//   border-radius: 20px;
+//   font-family: Arial;
+//   position: relative;
+//   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+// }
+
 .health {
   position: absolute;
   top: 5px;

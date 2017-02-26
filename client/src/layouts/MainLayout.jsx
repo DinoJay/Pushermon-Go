@@ -33,17 +33,24 @@ export default class MainLayout extends Component {
       // 'data-target': '.navbar-collapse.show'
     };
 
-
     return (
       <div className="layout layout--main">
         <DocumentMeta title={route.title} />
         <div className={location.pathname === '/' ? 'tickle-navbar-overlay' : ''}>
           <nav className="navbar navbar-light">
-            <img
-              className="tickle-thumbnail" type="button" data-toggle="collapse"
-              data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
-              aria-expanded="false" aria-label="Toggle navigation" src={userPic}
-            />
+            <h3 className="">
+              <img
+                className="tickle-thumbnail d-inline-block " type="button"
+                data-toggle="collapse" data-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01"
+                aria-expanded="false" aria-label="Toggle navigation"
+                src={userPic}
+                alt={location.pathname}
+                style={{ marginRight: '10px' }}
+              />
+              {location.pathname}
+
+            </h3>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
               <a className="navbar-brand" href="#">Jan Maushagen</a>
               <ul className="navbar-nav mr-auto mt-2 mt-lg-0">

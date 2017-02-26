@@ -21,6 +21,7 @@ export const routes = {
   Challenge: {
     path: '/challenge/',
     label: 'challenge',
+
     title: `${siteTitle} - Challenge`,
     component: Challenge
   },

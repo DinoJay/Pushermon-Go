@@ -1,14 +1,11 @@
 import React from 'react';
-import Footer from './Footer';
+import Header from './Footer';
 import AddTodo from '../containers/AddTodo';
 import VisibleTodoList from '../containers/VisibleTodoList';
 
-const Todos = () => (
-  <div className="container-fluid">
-    <AddTodo />
+export default () => (
+  <div className="container">
+    <Header />
     <VisibleTodoList />
-    <Footer />
   </div>
 );
-
-export default Todos;

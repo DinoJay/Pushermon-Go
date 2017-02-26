@@ -1,21 +1,21 @@
 import { connect } from 'react-redux';
 import { toggleChallenge } from '../actions';
-import TodoList from '../components/TodoList';
+import ChallengeList from '../components/ChallengeList';
 
-const getVisibleChallenges = (todos, filter) => {
+const getVisibleChallenges = (challenges, filter) => {
   switch (filter) {
   case 'SHOW_ALL':
-    return todos;
+    return challenges;
   case 'SHOW_COMPLETED':
-    return todos.filter(t => t.completed);
+    return challenges.filter(t => t.completed);
   case 'SHOW_ACTIVE':
-    return todos.filter(t => !t.completed);
+    return challenges.filter(t => !t.completed);
   // skip default
   }
 };
 
 const mapStateToProps = state => ({
-  todos: getVisibleChallenges(state.todos, state.visibilityFilter)
+  challenges: getVisibleChallenges(state.challenges, state.visibilityFilter)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -27,6 +27,6 @@ const mapDispatchToProps = dispatch => ({
 const VisibleChallengeList = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TodoList);
+)(ChallengeList);
 
 export default VisibleChallengeList;

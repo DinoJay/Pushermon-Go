@@ -6,7 +6,7 @@ import MapGL from 'react-map-gl';
 import Pusher from 'pusher-js';
 import ngeohash from 'ngeohash';
 
-import ChallengeCard from './components/challenges/ChallengeCard';
+import { ChallengeCard } from './components/challenges/ChallengeCard';
 
 import ChallengesOverlay from './components/map-layers/ChallengesOverlay';
 import UserMarkerOverlay from './components/map-layers/UserMarkerOverlay';
@@ -54,7 +54,6 @@ const Modal = ({ challenge }) => (
 
 export default class App extends React.Component {
   constructor(props) {
-    console.log('willMount', props);
     super(props);
     this.state = {
       viewport: {
