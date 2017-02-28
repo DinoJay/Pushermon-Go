@@ -29,7 +29,7 @@ const createDummyData = limit => d3.range(limit).map((i) => {
 
 
 const defaultState = {
-  challenges: createDummyData(4)
+  cards: createDummyData(4)
 };
 
 const store = createStore(todoApp, defaultState);

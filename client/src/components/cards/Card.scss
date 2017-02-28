@@ -3,6 +3,14 @@
 .challengeImgTop {
   @extend .card-img-top;
   height: 200px;
+  // width: 80%;
+}
+
+.header {
+  @extend .card-header;
+  background-color: initial;
+  border-radius: 0;
+  color: white;
 }
 
 // .card {

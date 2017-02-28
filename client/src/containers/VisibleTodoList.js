@@ -1,21 +1,21 @@
 import { connect } from 'react-redux';
 import { toggleChallenge } from '../actions';
-import ChallengeList from '../components/ChallengeList';
+import CardStack from '../components/cards/CardStack';
 
-const getVisibleChallenges = (challenges, filter) => {
+const getVisibleChallenges = (cards, filter) => {
   switch (filter) {
   case 'SHOW_ALL':
-    return challenges;
+    return cards;
   case 'SHOW_COMPLETED':
-    return challenges.filter(t => t.completed);
+    return cards.filter(t => t.completed);
   case 'SHOW_ACTIVE':
-    return challenges.filter(t => !t.completed);
+    return cards.filter(t => !t.completed);
   // skip default
   }
 };
 
 const mapStateToProps = state => ({
-  challenges: getVisibleChallenges(state.challenges, state.visibilityFilter)
+  cards: getVisibleChallenges(state.cards, state.visibilityFilter)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -24,9 +24,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const VisibleChallengeList = connect(
+const VisibleCardList = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ChallengeList);
+)(CardStack);
 
-export default VisibleChallengeList;
+export default VisibleCardList;

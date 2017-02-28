@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import challenges from './challenges';
+import cards from './cards';
 import visibilityFilter from './visibilityFilter';
 
 const todoApp = combineReducers({
-  challenges,
+  cards,
   visibilityFilter
 });
 

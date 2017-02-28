@@ -1,22 +1,24 @@
 import React from 'react';
 
-import styles from './ChallengeCard.scss';
+import styles from './Card.scss';
 import imgSrc from './example_challenge.jpg';
 
-const ChallengeCard = (props) => {
+const Card = (props) => {
   const cardStyle = {
     borderColor: 'gold',
-    maxWidth: '30rem'
+    maxWidth: '30rem',
+    backgroundColor: 'white'
   };
   return (
-    <div className={styles.ChallengeCard} style={cardStyle}>
-      <div className="card-header">
+    <div className={styles.Card} style={cardStyle}>
+      <div className={styles.header}>
         <div className="row">
           <div className="col float-left">{props.challenge}</div>
           <div className="col float-right">{props.xpPoints}</div>
         </div>
       </div>
-      <img className={styles.challengeImgTop} src={imgSrc} alt="Challenge cap" />
+      <img className={`${styles.challengeImgTop} card-block`} src={imgSrc} alt="Challenge cap" />
+
       <div className="card-block">
         <h4 className="card-title">{props.title}</h4>
         <p className="card-text" >
@@ -38,7 +40,7 @@ const ChallengeCard = (props) => {
   );
 };
 
-ChallengeCard.propTypes = {
+Card.propTypes = {
   title: React.PropTypes.string.isRequired,
   description: React.PropTypes.string.isRequired,
   place: React.PropTypes.string.isRequired,
@@ -50,7 +52,7 @@ ChallengeCard.propTypes = {
   decksOfFriends: React.PropTypes.array.isRequired
 };
 
-ChallengeCard.defaultProps = {
+Card.defaultProps = {
   title: 'The evil detective',
   description: 'You defended the evil detective from taking over the control of the blackmarket!',
   place: 'Brussels, Marolles',
@@ -64,20 +66,20 @@ ChallengeCard.defaultProps = {
 };
 
 
-const PreviewChallenge = (props) => {
+const CardPreview = (props) => {
   const cardStyle = {
     borderColor: 'gold',
     maxWidth: '30rem'
   };
   return (
-    <div className={styles.ChallengeCard} style={cardStyle}>
-      <div className="">
+    <div className={styles.Card} style={cardStyle}>
+      <div className={styles.header}>
         <div className="row">
           <div className="col float-left">{props.challenge}</div>
           <div className="col float-right">{props.xpPoints}</div>
         </div>
       </div>
-      <img className={styles.challengeImgTop} src={imgSrc} alt="Challenge cap" />
+      <img className={`${styles.challengeImgTop} mx-auto d-block`} src={imgSrc} alt="Challenge cap" />
       <div className="card-block">
         <h5 className="card-title">{props.title}</h5>
         <p className="card-text" >
@@ -91,7 +93,7 @@ const PreviewChallenge = (props) => {
   );
 };
 
-PreviewChallenge.propTypes = {
+CardPreview.propTypes = {
   title: React.PropTypes.string.isRequired,
   description: React.PropTypes.string.isRequired,
   // TODO: change in future to component
@@ -99,7 +101,7 @@ PreviewChallenge.propTypes = {
   xpPoints: React.PropTypes.number.isRequired
 };
 
-PreviewChallenge.defaultProps = {
+CardPreview.defaultProps = {
   title: 'The evil detective',
   description: 'You defended the evil detective from taking over the control of the blackmarket!',
   place: 'Brussels, Marolles',
@@ -112,4 +114,4 @@ PreviewChallenge.defaultProps = {
   decksOfFriends: ['Nils', 'Kiran', 'Babba']
 };
 
-export { ChallengeCard, PreviewChallenge };
+export { Card, CardPreview };

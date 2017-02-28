@@ -4,8 +4,8 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 
 import MainLayout from './layouts/MainLayout';
 import App from './App';
-import Challenge from './components/challenges/ChallengeCard';
-import Journal from './ChallengeCRUD';
+import Challenge from './components/cards/Card';
+import JournalStore from './ChallengeCRUD';
 // import NotFound from './containers/NotFound/NotFound';
 
 // debug('lego:routes');
@@ -14,7 +14,7 @@ const siteTitle = 'MappCards';
 export const routes = {
   App: {
     path: '/',
-    label: 'App',
+    label: 'Map',
     title: `${siteTitle} - About`,
     component: App
   },
@@ -29,7 +29,7 @@ export const routes = {
     path: '/journal/',
     label: 'Journal',
     title: `${siteTitle} - Todo`,
-    component: Journal
+    component: JournalStore
   }
 };
 

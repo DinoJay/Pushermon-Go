@@ -1,12 +1,12 @@
-const challenge = (state = {}, action) => {
+const card = (state = {}, action) => {
   switch (action.type) {
-  case 'ADD_CHALLENGE':
+  case 'ADD_Card':
     return {
       id: action.id,
       text: action.text,
       completed: false
     };
-  case 'TOGGLE_CHALLENGE':
+  case 'TOGGLE_CARD':
     if (state.id !== action.id) {
       return state;
     }
@@ -19,20 +19,20 @@ const challenge = (state = {}, action) => {
   }
 };
 
-const challenges = (state = [], action) => {
+const cards = (state = [], action) => {
   switch (action.type) {
-  case 'ADD_CHALLENGE':
+  case 'ADD_Card':
     return [
       ...state,
-      challenge(undefined, action)
+      card(undefined, action)
     ];
-  case 'TOGGLE_CHALLENGE':
+  case 'TOGGLE_CARD':
     return state.map(t =>
-        challenge(t, action)
+        card(t, action)
       );
   default:
     return state;
   }
 };
 
-export default challenges;
+export default cards;

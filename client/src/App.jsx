@@ -6,7 +6,7 @@ import MapGL from 'react-map-gl';
 import Pusher from 'pusher-js';
 import ngeohash from 'ngeohash';
 
-import { ChallengeCard } from './components/challenges/ChallengeCard';
+import { Card } from './components/cards/Card';
 
 import ChallengesOverlay from './components/map-layers/ChallengesOverlay';
 import UserMarkerOverlay from './components/map-layers/UserMarkerOverlay';
@@ -113,7 +113,7 @@ export default class App extends React.Component {
   cardClickHandler(d) {
     console.log('cardClickHandler', d);
     jQuery('.modal').modal('show');
-    this.setState({ challenge: <ChallengeCard {...d} /> });
+    this.setState({ challenge: <Card {...d} /> });
   }
 
   _onChangeViewport(viewport) {

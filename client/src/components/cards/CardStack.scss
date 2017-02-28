@@ -2,7 +2,6 @@
   margin: 0 auto;
   position: relative;
   z-index: 1000;
-  width: 320px;
   height: 420px;
   padding: 0;
   list-style: none;
@@ -10,11 +9,6 @@
 }
 
 .stack__item {
-  background: #fff;
-  height: 100%;
-  width: 100%;
-  border-radius: 4px;
-  text-align: center;
   overflow: hidden;
   position: absolute;
   opacity: 0;
@@ -32,7 +26,6 @@
 }
 
 .stack__item img {
-  width: 100%;
   display: block;
   pointer-events: none;
 }
@@ -218,7 +211,6 @@
 /***********************************************/
 /******************** yuda *********************/
 /***********************************************/
-
 .stack--yuda .stack__item--reject {
   -webkit-animation: yudaReject 0.5s forwards;
   animation: yudaReject 0.5s forwards;
