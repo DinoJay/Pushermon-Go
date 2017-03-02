@@ -36,19 +36,18 @@ function isInMapBounds(coords, mapBounds) {
   return false;
 }
 
-const Modal = ({ challenge }) => (
-  <div
-    className="modal fade" id="myModal" tabIndex="-1" role="dialog"
-    aria-labelledby="exampleModalLabel" aria-hidden="true"
-  >
-    <div className="modal-dialog" role="document">
-      {challenge}
+const Modal = ({ children }) => (
+  <div className="w3-modal" style={{ display: children ? 'block' : 'none' }}>
+    <div className="w3-modal-content">
+      <div className="w3-container" role="document">
+        {children}
+      </div>
     </div>
   </div>
 );
 
 // Modal.propTypes = {
-//   challenge: React.PropTypes.object.isRequired
+//   card: React.PropTypes.object.isRequired
 // };
 
 
@@ -65,7 +64,7 @@ export default class App extends React.Component {
         zoom: 20
       },
       challenges: [],
-      challenge: null
+      cardProps: null
     };
   }
 
@@ -110,10 +109,8 @@ export default class App extends React.Component {
   componentDidUpdate() {
   }
 
-  cardClickHandler(d) {
-    console.log('cardClickHandler', d);
-    jQuery('.modal').modal('show');
-    this.setState({ challenge: <Card {...d} /> });
+  cardClickHandler(cardProps) {
+    this.setState({ cardProps });
   }
 
   _onChangeViewport(viewport) {
@@ -197,14 +194,18 @@ export default class App extends React.Component {
     navigator.geolocation.watchPosition(() => {}, () => {}, { timeout: 1 });
     navigator.geolocation.getCurrentPosition(() => {}, () => {}, { timeout: 1 });
     console.log('curPosId', this.state);
-    // console.log('watchPosId', this.state.watchPosId);
+
     navigator.geolocation.clearWatch(this.state.watchPosId);
   }
 
   render() {
     return (
       <div key={`${location.pathname}${location.search}`}>
-        <Modal challenge={this.state.challenge} />
+        <Modal >
+          {!this.state.cardProps ? null :
+          <Card {...this.state.cardProps} closeHandler={() => { console.log('closeHandler'); this.setState({ cardProps: null }); }} />
+        }
+        </Modal>
 
         <MapGL
           {...this.state.viewport}

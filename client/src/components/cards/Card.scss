@@ -1,13 +1,13 @@
-@import '~bootstrap/scss/bootstrap.scss';
+// @import '~bootstrap/scss/bootstrap.scss';
 
 .challengeImgTop {
-  @extend .card-img-top;
+  // @extend .card-img-top;
   height: 200px;
   // width: 80%;
 }
 
 .header {
-  @extend .card-header;
+  // @extend .card-header;
   background-color: initial;
   border-radius: 0;
   color: white;
@@ -24,39 +24,3 @@
 //   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 // }
 
-.health {
-  position: absolute;
-  top: 5px;
-  right: 25px;
-color: #603871; }
-img.hero { width:auto ; height: auto; }
-
-.strengths, .weaknesses {
-  width: 50%;
-  float: left;
-}
-h1,h2,h3,h4,h5 {
-  color: #A60D60;
-  margin-top: .5em;
-  margin-bottom:.3em;
-}
-label {
-  float: left;
-  width: 33%;
-  padding-right: 2%;
-  padding-bottom: 2%;
-  clear: both;
-}
-b { float: left; width: 65%; padding-bottom: 2%;}
-.clear { clear: both; }
-
-.badges {
-  height: 75px;
-  width: 200px;
-}
-
-.rating {
-  height: 75px;
-  width: 200px;
-  float: right;
-}

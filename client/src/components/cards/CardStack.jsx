@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import * as d3 from 'd3';
-import { CardPreview } from './Card';
+import { Card } from './Card';
 
 
 import styles from './CardStack.scss';
@@ -19,47 +19,42 @@ const colorScale = d3.scaleLinear()
 
 // <li class="stack__item stack__item--current" >
 
-const StackItem = ({ onClick, completed, text, z }) => {
+const StackItem = (props) => {
   const style = {
     opacity: 1,
     pointerEvents: 'auto',
     // zIndex: z,
-    transform: `translate3d(0px, 0px, ${z * -50}px)`,
-    backgroundColor: colorScale(z),
-    borderWidth: '2px',
-    borderColor: 'black'
+    transform: `translate3d(0px, 0px, ${props.z * -50}px)`
   };
 
   return (
     <li
       className={`${styles.stack__item} ${styles['stack__item--current']}`}
-      onClick={onClick}
+      onClick={props.onClick}
       style={style}
     >
-      <CardPreview />
+      <Card {...props} />
     </li>
   );
 };
 
 StackItem.propTypes = {
   onClick: PropTypes.func.isRequired,
-  completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
   z: PropTypes.number.isRequired
 };
 
 
 const Stack = ({ cards, onChClick }) => {
-  const Items = cards.slice(0, 20).map((ch, i) =>
+  console.log('Stack', cards);
+  const Items = cards.map((ch, i) =>
     <StackItem
-      key={ch.id}
       {...ch}
       z={cards.length - i}
       onClick={() => onChClick(ch.id)}
     />
     );
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={null}>
       <ul
         className={`row ${styles.stack} ${styles['stack--yuda']}`}
         style={{
@@ -76,8 +71,7 @@ const Stack = ({ cards, onChClick }) => {
 
 Stack.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
+    key: PropTypes.number.isRequired
   }).isRequired).isRequired
 };
 

@@ -8,6 +8,7 @@ import { routes, LinkHelper } from '../Routes';
 import userPic from './user.png';
 import './MainLayout.scss';
 
+
 export default class MainLayout extends Component {
 
   static propTypes() {
@@ -17,6 +18,20 @@ export default class MainLayout extends Component {
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { isToggleOn: false };
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    console.log('state', this.state);
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+  }
 
   render() {
     // $('.navbar-nav').on('click', () => {
@@ -27,52 +42,49 @@ export default class MainLayout extends Component {
     // const route = cfg || routes.homepage;
     const route = routes.App;
     const navLinkProps = {
-      className: 'layout__nav-link',
+      className: 'w3-bar-item w3-button',
       activeClassName: 'layout__nav-link--selected'
       // 'data-toggle': 'collapse'
       // 'data-target': '.navbar-collapse.show'
     };
 
+    let toggleStyle;
+    if (this.state.isToggleOn) {
+      toggleStyle = 'w3-show';
+    } else toggleStyle = 'w3-hide-large w3-hide-medium w3-hide';
+
+    console.log('toggleStyle', toggleStyle);
+
     return (
-      <div className="layout layout--main">
-        <DocumentMeta title={route.title} />
-        <div className={location.pathname === '/' ? 'tickle-navbar-overlay' : ''}>
-          <nav className="navbar navbar-light">
-            <h3 className="">
+      <div>
+        <div className="layout layout--main">
+          <DocumentMeta title={route.title} />
+          <div className="w3-bar w3-indigo w3-xlarge">
+            <a className="w3-bar-item w3-button w3-left" onClick={this.handleClick}>
               <img
-                className="tickle-thumbnail d-inline-block " type="button"
-                data-toggle="collapse" data-target="#navbarTogglerDemo01"
-                aria-controls="navbarTogglerDemo01"
-                aria-expanded="false" aria-label="Toggle navigation"
+                className="w3-hide-small" type="button"
+                style={{ height: '40px' }}
                 src={userPic}
                 alt={location.pathname}
-                style={{ marginRight: '10px' }}
               />
+            </a>
+            <a
+              className="w3-cell w3-cell-middle w3-left"
+              style={{ paddingTop: '8px' }}
+              onClick={this.handleClick}
+            >
               {location.pathname}
-
-            </h3>
-            <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-              <a className="navbar-brand" href="#">Jan Maushagen</a>
-              <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li className="nav-item">
-                  <LinkHelper to="Journal" {...navLinkProps} />
-                </li>
-                <li className="nav-item active">
-                  <LinkHelper to="App" {...navLinkProps} />
-                </li>
-                <li className="nav-item active">
-                  <LinkHelper to="Challenge" {...navLinkProps} />
-                </li>
-              </ul>
-            </div>
-          </nav>
+            </a>
+          </div>
+          <div className={`w3-bar-block w3-indigo ${toggleStyle}`}>
+            <LinkHelper to="Journal" {...navLinkProps} onClick={this.handleClick} />
+            <LinkHelper to="App" {...navLinkProps} onClick={this.handleClick} />
+            <LinkHelper to="Challenge" {...navLinkProps} onClick={this.handleClick} />
+          </div>
+          <div className="layout__content">
+            {children}
+          </div>
         </div>
-        <div className="layout__content">
-          {children}
-        </div>
-        <footer className="layout__footer">
-          Hosted at <a href="http://github.com/DinoJay">github.com/DinoJay</a>
-        </footer>
       </div>
     );
   }

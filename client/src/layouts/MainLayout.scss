@@ -1,6 +1,7 @@
 $btn-font-weight:bold !default;
-@import '~bootstrap/scss/bootstrap.scss';
+// @import '~bootstrap/scss/bootstrap.scss';
 @import '~colors.css/css/colors.css';
+@import './w3.css';
 
 // $btn-line-height:                1.25 !default;
 
@@ -18,7 +19,7 @@ html,body{height:100%;}
 }
 
 .tickle-thumbnail {
-  @extend .img-thumbnail;
+  // @extend .img-thumbnail;
   // min-height: 20px;
   max-height: 50px;
   max-width: 50px;

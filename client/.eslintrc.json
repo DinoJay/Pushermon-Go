@@ -16,7 +16,8 @@
     "default-case": ["error", { "commentPattern": "^skip\\sdefault" }],
     "react/forbid-prop-types": 0,
     "react/no-find-dom-node": 0,
-    "react/no-multi-comp": 0
+    "react/no-multi-comp": 0,
+    "jsx-a11y/href-no-hash": 0
   },
   "plugins": [
     "react",

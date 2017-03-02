@@ -4,32 +4,49 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 
+// import imgSrc from './components/example_challenge.jpg';
+
+
 import todoApp from './reducers';
 import Journal from './components/Journal';
 
-const createDummyData = limit => d3.range(limit).map((i) => {
-  const latitude = 0;
-  const longitude = 0;
-  return ({
-    id: i,
-    text: 'dummy',
-    completed: false,
-    title: 'The evil detective',
-    description: 'You defended the evil detective from taking over the control of the blackmarket!',
-    place: 'Brussels, Marolles',
-    contentType: 'Art, Culture, Comics',
-            // TODO: change in future to component
-    coords: { latitude, longitude },
-    challenge: 'Quiz',
-    difficulty: 'hard',
-    xpPoints: 100,
-    decksOfFriends: ['Nils', 'Kiran', 'Babba']
-  });
-});
+const exampleCard = {
+  title: 'The peculiar story of Arthur De Greef',
+  key: Math.random() * 100,
+  tags: ['Art', 'Culture', 'Comics', 'Music'],
+  img: 'https://unsplash.it/600/300/?random',
+  xpPoints: 100,
+  // TODO: remove in future to component
+  closeHandler: () => (null),
+  description: 'What so special about the location, describe it',
+  location: { latitude: 50.828797, longitude: 4.352191 },
+  place: 'Park next to my Home',
+  decksOfFriends: ['Nils', 'Kiran', 'Babba', '(some friends who already obtained the card)'],
+  creator: 'Jan',
+  media: [
+    'photo',
+    'hyperlink',
+    'game'
+  ],
+  feedback: [
+    {
+      user: 'Nils',
+      text: 'I did not know that he was such a famous composer'
+    },
+    {
+      user: 'Babba',
+      text: 'What a nice park, strange, that they put a mask on his face!'
+    }
+  ],
+  cardSets: ['Brussels VIP', 'Music challenge']
+};
+
+// const createDummyData = limit => d3.range(limit).map((i) => {
+// });
 
 
 const defaultState = {
-  cards: createDummyData(4)
+  cards: [exampleCard]
 };
 
 const store = createStore(todoApp, defaultState);

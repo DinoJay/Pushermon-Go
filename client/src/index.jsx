@@ -1,4 +1,4 @@
-import 'bootstrap/dist/js/bootstrap';
+// import 'bootstrap/dist/js/bootstrap';
 import 'font-awesome/css/font-awesome.css';
 
 import React from 'react';
