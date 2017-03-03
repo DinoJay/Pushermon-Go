@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import styles from './Card.scss';
 import colorClasses from '../colorClasses';
 
+
 const mediaTypes = ['game', 'hyperlink', 'photo', 'video'];
 
 const mediaScale = d3.scaleOrdinal()
@@ -16,44 +17,94 @@ const colorScale = d3.scaleLinear()
     .range(colorClasses)
     .clamp(true);
 
-const CardDetail = ({ place, decksOfFriends, description, location, feedback, media, creator, cardSets }) => <div>
-  <table className="w3-table w3-striped w3-bordered">
-    <tr className=""><td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td></tr>
-    <tr className=""><td>Description:</td><td>{description}</td></tr>
-    <tr className=""><td>In deck of friends:</td><td>{decksOfFriends.join(', ')}</td> </tr>
-    <tr className=""><td>Media</td><td>{media.map(m => <i style={{ marginRight: '10px' }} className={`fa ${mediaScale(m)} fa-6`} aria-hidden="true" />)}</td> </tr>
-    <tr className=""><td>Creator</td><td><img className="w3-hide-small w3-circle" src="https://api.adorable.io/avatars/49/jan.png" style={{ height: '30px' }} /></td></tr>
-    <tr className=""><td>Card Sets</td>
-      <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorScale(Math.random() * 30)}`}>{c}</span>)} </td>
-    </tr>
-    <tr className=""><td>Feedback</td>
-      <td>
-        {
-          feedback.map(fb => (
+const colorClass = () => colorScale(Math.random() * 30);
+
+
+const CardDetail = ({ place, decksOfFriends, description, location, comments, caption, media, creator, cardSets, linkedCards }) => (
+  <div>
+    <div className={`w3-container w3-margin w3-center ${styles.caption}`}>{caption}</div>
+    <section className="w3-container w3-margin">
+      <table className="w3-table w3-striped w3-bordered">
+        <tr className=""><td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td></tr>
+        <tr className=""><td>Description:</td><td>{description}</td></tr>
+        <tr className=""><td>In deck of friends:</td><td>{decksOfFriends.join(', ')}</td> </tr>
+        <tr className=""><td>Media</td>
+          <td>
+            <div className="w3-row">
+              {media.map(m =>
+                <div key={m.src}>
+                  <span className="w3-col" style={{ width: '20px' }}>
+                    <i className={`fa ${mediaScale(m.type)} fa-3 w3-margin-right`} aria-hidden="true" />
+                  </span>
+                  <span className="w3-rest"> <a href={m.src}> { m.name } </a></span>
+                </div>
+          )}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Creator</td>
+          <td>
+            <div className={`w3-col ${styles.colSmallAvatar}`}>
+              <img
+                className="w3-circle"
+                src="https://api.adorable.io/avatars/49/jan.png"
+                alt="jan"
+              />
+            </div>
+            <div className="w3-rest">{'jan'}</div>
+          </td>
+        </tr>
+        <tr>
+          <td>Card Sets</td>
+          <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+        </tr>
+        <tr><td>comments</td>
+          <td>
+            {
+          comments.map(fb => (
             <div key={fb.user} className="w3-row" style={{ paddingBottom: '10px' }}>
-              <div className="w3-col s1"><img className="w3-hide-small w3-circle" src={`https://api.adorable.io/avatars/49/${fb.user}.png`} alt={fb.user} style={{ height: '30px' }} /></div>
-              <div className="w3-col s11">{fb.text}</div>
+              <div className={`w3-col ${styles.colSmallAvatar}`} style={{ width: '40px' }}>
+                <img
+                  className="w3-circle" src={`https://api.adorable.io/avatars/49/${fb.user}.png`}
+                  alt={fb.user} style={{ height: '30px' }}
+                />
+              </div>
+              <div className="w3-rest">{fb.text}</div>
             </div>
           )
         )
         }
-      </td>
-    </tr>
-  </table>
-  <div className="">
-    <a href="#">Acquire!</a>
+          </td>
+        </tr>
+        <tr>
+          <td>linked Cards</td>
+          <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+        </tr>
+      </table>
+    </section>
+    <div className="w3-padding">
+      <button className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}>
+        <span style={{ marginLeft: '10px' }}> Collect! </span>
+        <i className="fa fa-lock" aria-hidden="true" />
+      </button>
+
+    </div>
   </div>
-</div>;
+);
+
 
 CardDetail.propTypes = {
   place: React.PropTypes.string.isRequired,
   location: React.PropTypes.object,
+  caption: React.PropTypes.string.isRequired,
   description: React.PropTypes.string.isRequired,
   decksOfFriends: React.PropTypes.array.isRequired,
-  feedback: React.PropTypes.array.isRequired,
+  comments: React.PropTypes.array.isRequired,
   media: React.PropTypes.array.isRequired,
   creator: React.PropTypes.string.isRequired,
-  cardSets: React.PropTypes.array.isRequired
+  cardSets: React.PropTypes.array.isRequired,
+  linkedCards: React.PropTypes.array.isRequired
 };
 
 CardDetail.defaultProps = {
@@ -68,7 +119,7 @@ CardDetail.defaultProps = {
       { type: 'hyperlink', src: 'https://en.wikipedia.org/wiki/Arthur_De_Greef_(composer)' },
       { type: 'game', src: 'todo' }
   ],
-  feedback: [
+  comments: [
     {
       user: 'Nils',
       img: 'https://placeholdit.imgix.net/~text?txtsize=6&txt=50%C3%9750&w=50&h=50',
@@ -90,21 +141,21 @@ const CardCont = ({ key, title, closeHandler, tags, xpPoints, img, children }) =
   }
 
   return (
-    <div key={key} className={`w3-card-4 ${colorScale(Math.random() * 30)}`}>
+    <div key={key} className={`w3-card-4 ${colorClass()}`} style={{ maxWidth: '700px' }}>
       {Closer}
-      <div className="w3-container">
-        <h1>{title}</h1>
-        <div className="w3-row-padding">
-          <div className="w3-col s4"><span className="w3-badge w3-xlarge w3-green">Exp {xpPoints}</span></div>
-          <div className="w3-col s4">{tags.map(t => <span key={t} className={`w3-tag ${colorScale(Math.random() * 30)}`}>{t}</span>)}</div>
+      <section className="w3-margin w3-container">
+        <h2>{title}</h2>
+        <div className="w3-row">
+          <div className="w3-col s4"><span className="w3-badge w3-round w3-xlarge w3-green" >Exp {xpPoints}</span></div>
+          <div className="w3-col s8 w3-right-align">
+            {tags.map(t => <span key={t} className={`w3-tag w3-xlarge ${colorClass()}`} style={{ float: 'right' }}>{t}</span>)}
+          </div>
         </div>
-      </div>
+      </section>
       <div className="w3-container">
-        <img style={{ maxHeight: '320px' }} src={img} alt="Card cap" />
+        <img className="w3-row-padding w3-col s12 w3-center" src={img} alt="Card cap" />
       </div>
-      <footer className="w3-container">
-        {children}
-      </footer>
+      {children}
     </div>);
 };
 
@@ -130,7 +181,18 @@ CardCont.defaultProps = {
   children: <CardDetail />
 };
 
-const Card = props => <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+const Card = props => (
+  <div className={styles.flipContainer} ontouchstart="this.classList.toggle('hover');">
+    <div className={styles.flipper}>
+      <div className={styles.front}>
+        <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+      </div>
+      <div className={styles.back}>
+        <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+      </div>
+    </div>
+  </div>
+);
 
 
 export { Card, CardCont };
