@@ -29,7 +29,7 @@ const StackItem = (props) => {
 
   return (
     <li
-      className={`${styles.stack__item} ${styles['stack__item--current']}`}
+      className={`w3-threequarter ${styles.stack__item} ${styles['stack__item--current']}`}
       onClick={props.onClick}
       style={style}
     >

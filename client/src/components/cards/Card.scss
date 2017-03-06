@@ -11,6 +11,12 @@
   height: 30px;
 }
 
+
+.flipContainer, .front, .back {
+  // width: 320px;
+  // height: 480px;
+}
+
 .flipContainer {
   -webkit-perspective: 1000;
   -moz-perspective: 1000;
@@ -22,15 +28,20 @@
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
 
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
+  // width: 200%;
+  // height: 200%;
 }
 
 
-/* flip the pane when hovered */
-.flipContainer:hover .flipper, .flipContainer.hover .flipper {
-  transform: rotateY(180deg);
-}
+// /* flip the pane when hovered */
+// .flipContainer:hover .flipper, .flipContainer.hover .flipper {
+//   transform: rotateY(180deg);
+// }
 
+.flipAnim {
+  transform: rotateY(360deg);
+}
 
 // .flipContainer, .front, .back {
 //   width: 320px;
@@ -38,102 +49,89 @@
 // }
 
 .flipper {
-  -webkit-transition: 0.6s;
-  -webkit-transform-style: preserve-3d;
-  -ms-transition: 0.6s;
-
-  -moz-transition: 0.6s;
-  -moz-transform: perspective(1000px);
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
+  // height: 100%;
+  // width: 100%;
 
   transition: 0.6s;
   transform-style: preserve-3d;
 
-  position: relative;
+  // position: absolute;
+  // width: 200%;
+  // height: 200%;
 }
 
 .front, .back {
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
   backface-visibility: hidden;
-
-  -webkit-transition: 0.6s;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transform: rotateY(0deg);
-
-  -moz-transition: 0.6s;
-  -moz-transform-style: preserve-3d;
-  -moz-transform: rotateY(0deg);
-
-  -o-transition: 0.6s;
-  -o-transform-style: preserve-3d;
-  -o-transform: rotateY(0deg);
-
-  -ms-transition: 0.6s;
-  -ms-transform-style: preserve-3d;
-  -ms-transform: rotateY(0deg);
-
+  // height: 800px;
+  // width: 600px;
   transition: 0.6s;
   transform-style: preserve-3d;
   transform: rotateY(0deg);
 
-  position: absolute;
-  top: 0;
-  left: 0;
+  min-width: 320px;
+
+  // width: 200%
+  // position: absolute;
+  // top: 0;
+  // left: 0;
 }
 
 .front {
   -webkit-transform: rotateY(0deg);
   -ms-transform: rotateY(0deg);
-  background: lightgreen;
+  // background: lightgreen;
   z-index: 2;
+  min-width: 320px;
+  position: absolute;
 }
 
+
 .back {
-  background: lightblue;
+  // background: lightblue;
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
   -o-transform: rotateY(-180deg);
+
   -ms-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
+
+  // position: absolute;
 }
 
-.front .name {
-  font-size: 2em;
+.stampAvatar {
+  // @extend .w3-circle;
+  height: 60px;
+  transform: translate(30px, -60px);
+}
+
+
+.stamp {
   display: inline-block;
-  // background: rgba(33, 33, 33, 0.9);
-  // color: #f8f8f8;
-  // font-family: Courier;
-  // padding: 5px 10px;
-  // border-radius: 5px;
-  // bottom: 60px;
-  left: 25%;
-  position: absolute;
-  // text-shadow: 0.1em 0.1em 0.05em #333;
-  display: none;
-
-  -webkit-transform: rotate(-20deg);
-  -moz-transform: rotate(-20deg);
-  -ms-transform: rotate(-20deg);
-  transform: rotate(-20deg);
+  // border-radius: 20px;
+  border-width: 10px;
+  border-color: #ef3e42;
+  border-style: solid;
+  color: red;
+  text-transform: uppercase;
+  // margin: 0 auto;
+  font-size: 30px;
+  letter-spacing: -3px;
+  // padding: 0 8px;
+  opacity: 0.8;
+  transform: rotate(-10deg);
+  filter: blur(1.3px);
+  border-image: url(./grunge-stamp-30.png) 30;
 }
 
-.vertical.flipContainer {
-  position: relative;
+
+.textClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // border: 1px solid #000000;
+
 }
 
-.vertical .back {
-  -webkit-transform: rotateX(180deg);
-  -moz-transform: rotateX(180deg);
-  -ms-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-}
 
-.vertical.flipContainer .flipper {
-  -webkit-transform-origin: 100% 213.5px;
-  -moz-transform-origin: 100% 213.5px;
-  -ms-transform-origin: 100% 213.5px;
-  transform-origin: 100% 213.5px;
-}

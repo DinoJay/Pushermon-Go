@@ -20,14 +20,16 @@ const colorScale = d3.scaleLinear()
 const colorClass = () => colorScale(Math.random() * 30);
 
 
-const CardDetail = ({ place, decksOfFriends, description, location, comments, caption, media, creator, cardSets, linkedCards }) => (
+const CardDetail = ({ place, description, location, caption, media, cardSets, linkedCards }) => (
   <div>
     <div className={`w3-container w3-margin w3-center ${styles.caption}`}>{caption}</div>
     <section className="w3-container w3-margin">
       <table className="w3-table w3-striped w3-bordered">
         <tr className=""><td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td></tr>
-        <tr className=""><td>Description:</td><td>{description}</td></tr>
-        <tr className=""><td>In deck of friends:</td><td>{decksOfFriends.join(', ')}</td> </tr>
+        <tr><td>Description:</td><td>
+          <div className={styles.textClamp}>{description}</div>
+        </td>
+        </tr>
         <tr className=""><td>Media</td>
           <td>
             <div className="w3-row">
@@ -43,39 +45,8 @@ const CardDetail = ({ place, decksOfFriends, description, location, comments, ca
           </td>
         </tr>
         <tr>
-          <td>Creator</td>
-          <td>
-            <div className={`w3-col ${styles.colSmallAvatar}`}>
-              <img
-                className="w3-circle"
-                src="https://api.adorable.io/avatars/49/jan.png"
-                alt="jan"
-              />
-            </div>
-            <div className="w3-rest">{'jan'}</div>
-          </td>
-        </tr>
-        <tr>
           <td>Card Sets</td>
           <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
-        </tr>
-        <tr><td>comments</td>
-          <td>
-            {
-          comments.map(fb => (
-            <div key={fb.user} className="w3-row" style={{ paddingBottom: '10px' }}>
-              <div className={`w3-col ${styles.colSmallAvatar}`} style={{ width: '40px' }}>
-                <img
-                  className="w3-circle" src={`https://api.adorable.io/avatars/49/${fb.user}.png`}
-                  alt={fb.user} style={{ height: '30px' }}
-                />
-              </div>
-              <div className="w3-rest">{fb.text}</div>
-            </div>
-          )
-        )
-        }
-          </td>
         </tr>
         <tr>
           <td>linked Cards</td>
@@ -88,7 +59,6 @@ const CardDetail = ({ place, decksOfFriends, description, location, comments, ca
         <span style={{ marginLeft: '10px' }}> Collect! </span>
         <i className="fa fa-lock" aria-hidden="true" />
       </button>
-
     </div>
   </div>
 );
@@ -99,8 +69,7 @@ CardDetail.propTypes = {
   location: React.PropTypes.object,
   caption: React.PropTypes.string.isRequired,
   description: React.PropTypes.string.isRequired,
-  decksOfFriends: React.PropTypes.array.isRequired,
-  comments: React.PropTypes.array.isRequired,
+  friends: React.PropTypes.array.isRequired,
   media: React.PropTypes.array.isRequired,
   creator: React.PropTypes.string.isRequired,
   cardSets: React.PropTypes.array.isRequired,
@@ -112,23 +81,11 @@ CardDetail.defaultProps = {
   description: 'What so special about the location, describe it',
   location: { latitude: 50.828797, longitude: 4.352191 },
   place: 'Park next to my Home',
-  decksOfFriends: ['Nils', 'Kiran', 'Babba', '(some friends who already obtained the card)'],
   creator: 'Jan',
   media: [
       { type: 'photo', src: 'todo' },
       { type: 'hyperlink', src: 'https://en.wikipedia.org/wiki/Arthur_De_Greef_(composer)' },
       { type: 'game', src: 'todo' }
-  ],
-  comments: [
-    {
-      user: 'Nils',
-      img: 'https://placeholdit.imgix.net/~text?txtsize=6&txt=50%C3%9750&w=50&h=50',
-      text: 'I did not know that he was such a famous composer'
-    },
-    {
-      user: 'Babba',
-      text: 'What a nice park, strange, that they put a mask on his face!'
-    }
   ],
   cardSets: ['Brussels VIP', 'Music challenge (Cards can be specific sets)']
 };
@@ -141,7 +98,7 @@ const CardCont = ({ key, title, closeHandler, tags, xpPoints, img, children }) =
   }
 
   return (
-    <div key={key} className={`w3-card-4 ${colorClass()}`} style={{ maxWidth: '700px' }}>
+    <div key={key} className={`w3-card-4 ${colorClass()}`} >
       {Closer}
       <section className="w3-margin w3-container">
         <h2>{title}</h2>
@@ -181,18 +138,85 @@ CardCont.defaultProps = {
   children: <CardDetail />
 };
 
-const Card = props => (
-  <div className={styles.flipContainer} ontouchstart="this.classList.toggle('hover');">
-    <div className={styles.flipper}>
-      <div className={styles.front}>
-        <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+const CardBack = ({ key, friends, creator }) => (
+  <div key={key} style={{ height: '600px' }} className={`w3-card-4 ${colorClass()}`} >
+    <div className="w3-card">
+      <div className="w3-container w3-section">
+        <h2>Comments </h2>
+        {
+          friends.map(fr => (
+            <div key={fr.user} className="w3-row">
+              <div className="w3-col s3 w3-circle" >
+                <span className={styles.stamp}>{fr.user}</span>
+              </div>
+              <div className="w3-rest">
+                <p className={styles.textClamp}> {fr.text} </p>
+              </div>
+            </div>
+          )
+        )
+      }
       </div>
-      <div className={styles.back}>
-        <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+      <div className={'w3-container w3-section'}>
+        <h2>Creator </h2>
+        <div className={`w3-col ${styles.colSmallAvatar}`}>
+          <div className="w3-col s4 w3-circle" >
+            <span className={styles.stamp}>{creator}</span>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 );
 
+CardBack.propTypes = {
+  key: React.PropTypes.string.isRequired,
+  friends: React.PropTypes.array.isRequired
+};
+
+CardCont.defaultProps = {
+  key: 'asa',
+  friends: [
+    {
+      user: 'Nils',
+      img: 'https://placeholdit.imgix.net/~text?txtsize=6&txt=50%C3%9750&w=50&h=50',
+      text: 'I did not know that he was such a famous composer'
+    },
+    {
+      user: 'Babba',
+      text: 'What a nice park, strange, that they put a mask on his face!'
+    }
+  ]
+};
+
+
+const CardFront = props => <CardCont {...props}> <CardDetail {...props} /> </CardCont>;
+
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      frontView: true
+    };
+  }
+  render () {
+    const sideToggler = !this.state.frontView ? styles.flipAnim : null;
+    // const style = { position: !this.state.frontView ? 'absolute' : null };
+    const ToggleCard = this.state.frontView ? <CardFront {...this.props} /> : <CardBack {...this.props} />;
+    return (
+      <div
+        className={`${styles.flipContainer} ${sideToggler}`}
+        onClick={() => this.setState({ frontView: !this.state.frontView })}
+      >
+        <div className={`${styles.flipper} ${sideToggler}`}>
+          <div >
+            {ToggleCard}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 export { Card, CardCont };

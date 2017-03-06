@@ -22,7 +22,6 @@ const ArthurDeGreefCard = {
   description: 'Pianist Arthur De Greef born in Louvain. He was a pupil of Frank Liszt. I do not why there is statue is placed here. There is music school with the same name not far.',
   location: { latitude: 50.828797, longitude: 4.352191 },
   place: 'Park next to my Home',
-  decksOfFriends: ['Nils', 'Kiran', 'Babba', '(some friends who already obtained the card)'],
   creator: 'Jan',
   media: [
     {
@@ -41,7 +40,7 @@ const ArthurDeGreefCard = {
       src: ''
     }
   ],
-  comments: [
+  friends: [
     {
       user: 'Nils',
       text: 'I did not know that he was such a famous composer'
@@ -73,14 +72,13 @@ const FrankLisztCard = {
   description: 'The first pop star of classical music. He made girls cry with his virtuosic piano play. Much like Jimi hendrix he redefined the way to play his instrument',
   location: { latitude: 49.944574, longitude: 11.580127 },
   place: 'Bayreuth, a city with a long history of classical music',
-  decksOfFriends: ['Nils', 'Kiran'],
   creator: 'Jan',
   media: [
     { type: 'hyperlink',
       name: 'franz-liszt---the-first-rock-star',
       src: 'http://www.wagner-heavymetal.com/franz-liszt---the-first-rock-star.html' }
   ],
-  comments: [
+  friends: [
     {
       user: 'Nils',
       text: 'the band Phoenix dedicated an album to Liszt'
@@ -106,8 +104,7 @@ const jimiHendrixCard = {
   closeHandler: () => (null),
   description: 'The first pop star of classical music. He made girls cry with his virtuosic piano play. Much like Jimi hendrix he redefined the way to play his instrument',
   location: { latitude: 49.944574, longitude: 11.580127 },
-  place: 'Bayreuth, a city with a long history of classical music',
-  decksOfFriends: ['Nils', 'Kiran'],
+  place: 'GRAND PLACE À MOUSCRON',
   creator: 'Jan',
   media: [
     {
@@ -121,10 +118,22 @@ const jimiHendrixCard = {
       src: 'https://www.youtube.com/watch?v=_PVjcIO4MT4'
     }
   ],
-  comments: [
+  friends: [
     {
       user: 'Nils',
+      text: 'jimi yeah'
+    },
+    {
+      user: 'Kiran',
       text: 'the band Phoenix dedicated an album to Liszt'
+    },
+    {
+      user: 'babba',
+      text: 'all along the watch tower!'
+    },
+    {
+      user: 'gab',
+      text: 'BEER'
     }
   ],
   rating: [{
