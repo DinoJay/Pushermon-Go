@@ -26,7 +26,7 @@ export default class ChalllengesOverlay extends React.Component {
             style={{
               transform: `translate(${pixel[0]}px, ${pixel[1]}px)`
             }}
-            onClick={() => self.cardClickHandler(ch)}
+            onTouchStart={() => self.cardClickHandler(ch)}
           >
             <i className="fa fa-fw fa-question fa-2x" />
           </button>

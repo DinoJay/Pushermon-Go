@@ -43,11 +43,11 @@ const ArthurDeGreefCard = {
   friends: [
     {
       user: 'Nils',
-      text: 'I did not know that he was such a famous composer'
+      comment: 'I did not know that he was such a famous composer'
     },
     {
       user: 'Babba',
-      text: 'What a nice park, strange, that they put a mask on his face!'
+      comment: 'What a nice park, strange, that they put a mask on his face!'
     }
   ],
   rating: [{
@@ -81,7 +81,7 @@ const FrankLisztCard = {
   friends: [
     {
       user: 'Nils',
-      text: 'the band Phoenix dedicated an album to Liszt'
+      comment: 'the band Phoenix dedicated an album to Liszt'
     }
   ],
   rating: [{
@@ -121,19 +121,19 @@ const jimiHendrixCard = {
   friends: [
     {
       user: 'Nils',
-      text: 'jimi yeah'
+      comment: 'jimi yeah'
     },
     {
       user: 'Kiran',
-      text: 'the band Phoenix dedicated an album to Liszt'
+      comment: 'My hero, I want to have his haircut'
     },
     {
       user: 'babba',
-      text: 'all along the watch tower!'
+      comment: 'all along the watch tower!'
     },
     {
       user: 'gab',
-      text: 'BEER'
+      comment: 'BEER'
     }
   ],
   rating: [{

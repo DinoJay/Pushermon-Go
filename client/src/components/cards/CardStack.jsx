@@ -8,13 +8,8 @@ import styles from './CardStack.scss';
 // TODO: change, too complex
 // const margin = x => (x ** 2) / (-2.02244 + (0.256652 * x) + (0.00492707 * (x ** 2)));
 
-const colors = ['#3f51b5', '#5cc2f1', '#fff59d', '#9993c1', '#9993c1',
-  '#e88a63', '#91c794', '#565f77', '#9d62c5', '#EA9292', '#7c79ce'];
-
-const colorScale = d3.scaleLinear()
-    .domain(d3.range(colors.length))
-    .range(colors)
-    .clamp(true);
+// const colors = ['#3f51b5', '#5cc2f1', '#fff59d', '#9993c1', '#9993c1',
+//   '#e88a63', '#91c794', '#565f77', '#9d62c5', '#EA9292', '#7c79ce'];
 
 
 // <li class="stack__item stack__item--current" >
@@ -30,44 +25,57 @@ const StackItem = (props) => {
   return (
     <li
       className={`w3-threequarter ${styles.stack__item} ${styles['stack__item--current']}`}
-      onClick={props.onClick}
       style={style}
     >
-      <Card {...props} />
+      <Card {...props} closeHandler={props.closeHandler} />
     </li>
   );
 };
 
 StackItem.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  z: PropTypes.number.isRequired
+  z: PropTypes.number.isRequired,
+  closeHandler: PropTypes.func
+};
+
+StackItem.defaultProps = {
+  z: 0,
+  closeHandler: a => a
 };
 
 
-const Stack = ({ cards, onChClick }) => {
-  console.log('Stack', cards);
-  const Items = cards.map((ch, i) =>
-    <StackItem
-      {...ch}
-      z={cards.length - i}
-      onClick={() => onChClick(ch.id)}
-    />
+class Stack extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cards: props.cards
+    };
+  }
+  render () {
+    const updState = () => this.setState(prevState => ({ cards: prevState.cards.slice(0, prevState.cards.length - 1) }));
+    const Items = this.state.cards.map((ch, i) =>
+      <StackItem
+        {...ch}
+        z={this.state.cards.length - i}
+        closeHandler={updState}
+      />
     );
-  return (
-    <div style={null}>
-      <ul
-        className={`row ${styles.stack} ${styles['stack--yuda']}`}
-        style={{
-          perspective: '500px',
-          perspectiveOrigin: `50% ${-50}%`,
-          marginTop: `${75}px`
-        }}
-      >
-        {cards.length > 0 ? Items : <div> No collected cards!</div>}
-      </ul>
-    </div>
-  );
-};
+    return (
+      <div style={null}>
+        <ul
+          className={`row ${styles.stack} ${styles['stack--yuda']}`}
+          style={{
+            perspective: '500px',
+            perspectiveOrigin: `50% ${-50}%`,
+            marginTop: `${75}px`
+          }}
+        >
+          {this.state.cards.length > 0 ? Items : <div> No collected cards!</div>}
+        </ul>
+      </div>
+    );
+  }
+}
+
 
 Stack.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.shape({

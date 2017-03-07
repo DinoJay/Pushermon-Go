@@ -25,9 +25,13 @@ $btn-font-weight:bold !default;
 //   max-width: 50px;
 // }
 
-// .w3-card {
-//   display: flex;
-// }
+.w3-card-4 {
+  min-height: 700px;
+}
+
+.w3-modal-content {
+  background-color: initial;
+}
 //
 // .w3-container {
 //   flex:1;

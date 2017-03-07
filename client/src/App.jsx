@@ -7,6 +7,7 @@ import Pusher from 'pusher-js';
 import ngeohash from 'ngeohash';
 
 import { Card } from './components/cards/Card';
+import Modal from './components/utils/Modal';
 
 import ChallengesOverlay from './components/map-layers/ChallengesOverlay';
 import UserMarkerOverlay from './components/map-layers/UserMarkerOverlay';
@@ -36,21 +37,6 @@ function isInMapBounds(coords, mapBounds) {
   return false;
 }
 
-const Modal = ({ children }) => (
-  <div className="w3-modal" style={{ display: children ? 'block' : 'none' }}>
-    <div className="w3-modal-content">
-      <div className="w3-container" role="document">
-        {children}
-      </div>
-    </div>
-  </div>
-);
-
-// Modal.propTypes = {
-//   card: React.PropTypes.object.isRequired
-// };
-
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -69,7 +55,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('didMount');
     const self = this;
     window.addEventListener('resize', () => {
       this.setState({
@@ -82,7 +67,6 @@ export default class App extends React.Component {
 
     const watchPosId = navigator.geolocation.watchPosition((pos) => {
       // map.setCenter([pos.coords.longitude, pos.coords.latitude]);
-      console.log('watch pos', pos.coords);
       const newViewPort = Object.assign({}, self.state.viewport, {
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude
@@ -110,6 +94,7 @@ export default class App extends React.Component {
   }
 
   cardClickHandler(cardProps) {
+    console.log('cardProps', cardProps);
     this.setState({ cardProps });
   }
 
@@ -156,7 +141,7 @@ export default class App extends React.Component {
               d.latitude = parseFloat(d.coords.latitude);
               d.longitude = parseFloat(d.coords.longitude);
 
-              this.setState({ challenges: this.state.challenges.concat([d]) });
+              this.setState({ challenges: [d] });
               console.log('encounter');
             } else {
       // TODO: Show arrow indicators
@@ -203,7 +188,7 @@ export default class App extends React.Component {
       <div key={`${location.pathname}${location.search}`}>
         <Modal >
           {!this.state.cardProps ? null :
-          <Card {...this.state.cardProps} closeHandler={() => { console.log('closeHandler'); this.setState({ cardProps: null }); }} />
+          <Card {...this.state.cardProps} closeHandler={() => this.setState({ cardProps: null })} />
         }
         </Modal>
 
