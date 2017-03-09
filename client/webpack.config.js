@@ -85,20 +85,26 @@ module.exports = {
     inline: true,
     historyApiFallback: true,
     port: PORT,
-    host: HOST
+    host: HOST,
+    proxy: {
+      '**': {
+        target: 'http://localhost:8000/',
+        secure: false
+      }
+    }
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/template.html'
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      Tether: 'tether',
-      'window.Tether': 'tether'
+    })
+    // new webpack.ProvidePlugin({
+      // $: 'jquery',
+      // jQuery: 'jquery',
+      // 'window.jQuery': 'jquery',
+      // Tether: 'tether',
+      // 'window.Tether': 'tether'
       // Tooltip: 'exports-loader?Tooltip!bootstrap/js/dist/tooltip',
       // Alert: 'exports-loader?Alert!bootstrap/js/dist/alert',
       // Button: 'exports-loader?Button!bootstrap/js/dist/button',
@@ -110,6 +116,6 @@ module.exports = {
       // Scrollspy: 'exports-loader?Scrollspy!bootstrap/js/dist/scrollspy',
       // Tab: 'exports-loader?Tab!bootstrap/js/dist/tab',
       // Util: 'exports-loader?Util!bootstrap/js/dist/util'
-    })
+    // })
   ]
 };

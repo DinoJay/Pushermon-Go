@@ -21,7 +21,7 @@ const colorScale = d3.scaleLinear()
 const colorClass = () => colorScale(Math.random() * 30);
 
 
-class CardDetail extends React.Component {
+class CardFrontDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,56 +30,55 @@ class CardDetail extends React.Component {
   }
   render () {
     const { caption, location, description, media, cardSets, linkedCards, place } = this.props;
+    if (this.state.modalOpen) {
+      alert('MiniGame to acquire card!');
+      this.setState({ modalOpen: !this.state.modalOpen });
+    }
     return (
       <div>
-        <div className={`w3-container w3-margin w3-center ${styl.caption}`}>{caption}</div>
-        <section className="w3-container w3-margin">
+        <div className={`w3-margin w3-center ${styl.caption}`}>{caption}</div>
+        <section className="w3-container">
           <table className="w3-table w3-striped w3-bordered">
-            <tr className=""><td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td></tr>
-            <tr><td>Description:</td><td>
-              <div className={styl.textClamp}>{description}</div>
-            </td>
-            </tr>
-            <tr className=""><td>Media</td>
-              <td>
-                <div className="w3-row">
-                  {media.map(m =>
-                    <div key={m.src}>
-                      <span className="w3-col" style={{ width: '20px' }}>
-                        <i className={`fa ${mediaScale(m.type)} fa-3 w3-margin-right`} aria-hidden="true" />
-                      </span>
-                      <span className="w3-rest"> <a href={m.src}> { m.name } </a></span>
-                    </div>
-          )}
-                </div>
+            <tbody>
+              <tr className="">
+                <td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td>
+              </tr>
+              <tr><td>Description:</td><td>
+                <div className={styl.textClamp}>{description}</div>
               </td>
-            </tr>
-            <tr>
-              <td>Card Sets</td>
-              <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
-            </tr>
-            <tr>
-              <td>linked Cards</td>
-              <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
-            </tr>
+              </tr>
+              <tr className=""><td>Media</td>
+                <td>
+                  <div className="w3-row">
+                    {media.map(m =>
+                      <div key={m.src}>
+                        <span className="w3-col" style={{ width: '20px' }}>
+                          <i className={`fa ${mediaScale(m.type)} fa-3 w3-margin-right`} aria-hidden="true" />
+                        </span>
+                        <span className="w3-rest"> <a href={m.src}> { m.name } </a></span>
+                      </div>
+                  )}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Card Sets</td>
+                <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+              </tr>
+              <tr>
+                <td>linked Cards</td>
+                <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+              </tr>
+            </tbody>
           </table>
         </section>
-        <div className="w3-padding">
-          <button
-            onClick={() => this.setState({ modalOpen: true })}
-            className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}
-          >
-            <span style={{ marginLeft: '10px' }}> Collect! </span>
-            <i className="fa fa-lock" aria-hidden="true" />
-          </button>
-        </div>
       </div>
     );
   }
 }
 
 
-CardDetail.propTypes = {
+CardFrontDetail.propTypes = {
   place: React.PropTypes.string.isRequired,
   location: React.PropTypes.object,
   caption: React.PropTypes.string.isRequired,
@@ -89,7 +88,7 @@ CardDetail.propTypes = {
   linkedCards: React.PropTypes.array.isRequired
 };
 
-CardDetail.defaultProps = {
+CardFrontDetail.defaultProps = {
   key: 'asa',
   description: 'What so special about the location, describe it',
   location: { latitude: 50.828797, longitude: 4.352191 },
@@ -104,7 +103,7 @@ CardDetail.defaultProps = {
 };
 
 
-const CardPreview = ({ key, title, Controls, tags, xpPoints, img, children }) => (
+const CardFrontPreview = ({ key, title, Controls, tags, xpPoints, img, children }) => (
   <div key={key} className={`w3-card-4 ${colorClass()}`} >
     {Controls}
     <section className="w3-margin w3-container">
@@ -121,13 +120,13 @@ const CardPreview = ({ key, title, Controls, tags, xpPoints, img, children }) =>
       </div>
     </section>
     <div className="w3-container">
-      <img className="w3-row-padding w3-col s12 w3-center" src={img} alt="Card cap" />
+      <img className="w3-row-padding w3-col s12 w3-center" style={{ maxHeight: '600px' }} src={img} alt="Card cap" />
     </div>
     {children}
   </div>
   );
 
-CardPreview.propTypes = {
+CardFrontPreview.propTypes = {
   // id: React.PropTypes.number,
   key: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
@@ -138,7 +137,7 @@ CardPreview.propTypes = {
   children: React.PropTypes.array
 };
 
-CardPreview.defaultProps = {
+CardFrontPreview.defaultProps = {
   key: 'asa',
   title: 'TEST CARD TITLE',
   Controls: <div className="w3-container">
@@ -147,11 +146,11 @@ CardPreview.defaultProps = {
       <i className="fa fa-retweet" aria-hidden="true" />
     </span>
   </div>,
-  children: <CardDetail />
+  children: <CardFrontDetail />
 };
 
 const CardBack = ({ key, Controls, friends, creator }) => (
-  <div key={key} className={'w3-card-4 w3-white'} >
+  <div key={key} className={'w3-card-4 w3-sand'} >
     <div className="w3-card">
       {Controls}
       <div className="w3-container w3-section">
@@ -160,7 +159,7 @@ const CardBack = ({ key, Controls, friends, creator }) => (
           friends.map(fr => (
             <div key={fr.user} className="w3-row">
               <div className="w3-col s3" >
-                <span className={styl.stamp}>{fr.user}</span>
+                <h2 className={styl.stamp}>{fr.user}</h2>
               </div>
               <div className="w3-rest">
                 <div> <StarRating /> </div>
@@ -212,8 +211,30 @@ CardBack.defaultProps = {
   ]
 };
 
+const Controls = ({ flipHandler, closeHandler }) => (
+  <div>
+    <span onClick={flipHandler} className={`${styl.flipBtn} w3-btn`}>
+      <i className="fa fa-retweet fa-lg" aria-hidden="true" />
+    </span>
+    <span onClick={closeHandler} className={`${styl.closeBtn} w3-btn`}>
+      <i className="fa fa-times fa-lg" aria-hidden="true" />
+    </span>
+  </div>
+);
 
-const CardFront = props => <CardPreview {...props}> <CardDetail {...props} /> </CardPreview>;
+const CardFront = props =>
+  <CardFrontPreview {...props}>
+    <CardFrontDetail {...props} />
+    <div className="w3-padding">
+      <button
+        onClick={() => alert('MiniGame')}
+        className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}
+      >
+        <span style={{ marginLeft: '10px' }}> Collect! </span>
+        <i className="fa fa-lock" aria-hidden="true" />
+      </button>
+    </div>
+  </CardFrontPreview>;
 
 class Card extends React.Component {
   constructor(props) {
@@ -226,21 +247,17 @@ class Card extends React.Component {
     const sideToggler = !this.state.frontView ? styl.flipAnim : null;
     // const style = { position: !this.state.frontView ? 'absolute' : null };
     const flipHandler = () => this.setState({ frontView: !this.state.frontView });
-    let Controls = null;
-    if (this.props.closeHandler !== undefined) {
-      Controls = (<div className="w3-container">
-        <span onClick={this.props.closeHandler} className="w3-closebtn">&times;</span>
-        <span onClick={flipHandler} className="w3-closebtn">
-          <i className="fa fa-retweet" aria-hidden="true" />
-        </span>
-      </div>);
-    }
-
     let ToggleCard;
     if (this.state.frontView) {
-      ToggleCard = <CardFront {...this.props} Controls={Controls} />;
+      ToggleCard = (
+        <CardFront
+          {...this.props}
+          Controls={
+            <Controls flipHandler={flipHandler} {...this.props} />
+      }
+        />);
     } else {
-      ToggleCard = <CardBack {...this.props} Controls={Controls} />;
+      ToggleCard = <CardBack {...this.props} Controls={<Controls flipHandler={flipHandler} {...this.props} />} />;
     }
 
     return (
@@ -260,4 +277,4 @@ Card.propTypes = {
 };
 
 
-export { Card, CardPreview };
+export { Card, CardFrontPreview };

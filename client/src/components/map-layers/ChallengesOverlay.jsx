@@ -14,22 +14,29 @@ export default class ChalllengesOverlay extends React.Component {
 
   redraw(opt) {
     const self = this;
+    const width = 20;
+    const height = 30;
+    console.log('width', width);
     // console.log('self', self);
     // const scale = 0.5; // self.zoom;
     return (
-      this.challenges.map((ch, i) => {
-        const pixel = opt.project([ch.coords.longitude, ch.coords.latitude]);
+      this.cards.map((c) => {
+        const pixel = opt.project([c.location.longitude, c.location.latitude]);
+        console.log('pixel', pixel);
         return (
-          <button
-            key={i}
-            className={styles.card}
+          <div
+            key={c.key}
+            className={`${styles.card} w3-button`}
             style={{
-              transform: `translate(${pixel[0]}px, ${pixel[1]}px)`
+              width: `${width}px`,
+              height: `${height}px`,
+              transform: `translate(${pixel[0] - (width / 2)}px, ${pixel[1] - (height / 2)}px)`
             }}
-            onTouchStart={() => self.cardClickHandler(ch)}
+            onTouchStart={() => self.cardClickHandler(c)}
+            onClick={() => self.cardClickHandler(c)}
           >
             <i className="fa fa-fw fa-question fa-2x" />
-          </button>
+          </div>
         );
       })
 

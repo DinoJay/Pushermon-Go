@@ -16,6 +16,7 @@ export default class DivOverlay extends Component {
     };
   }
 
+
   render() {
     const { width, height, isDragging } = this.props;
     const style = {

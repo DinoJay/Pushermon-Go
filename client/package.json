@@ -6,13 +6,15 @@
   "scripts": {
     "build": "webpack --config webpack.production.config.js --progress --profile --colors",
     "start": "webpack-dev-server --progress --profile --colors --https",
-    "lint": "eslint --ext js --ext jsx src || exit 0"
+    "lint": "eslint --ext js --ext jsx src || exit 0",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/alicoding/react-webpack-babel"
   },
-  "author": "Ali Al Dallal",
+  "author": "DinoJay",
   "license": "MIT",
   "homepage": "https://github.com/alicoding/react-webpack-babel#readme",
   "dependencies": {
@@ -20,16 +22,13 @@
     "colors.css": "^3.0.0",
     "d3": "^4.5.0",
     "dsv-loader": "^2.0.0",
-    "example-cities": "0.0.0",
     "font-awesome": "^4.7.0",
-    "font-awesome-webpack": "0.0.4",
     "immutable": "^3.8.1",
     "json-loader": "^0.5.4",
     "mapbox-gl": "^0.32.1",
     "ngeohash": "^0.6.0",
     "node-sass": "^4.5.0",
     "pusher-js": "^4.0.0",
-    "r-dom": "^2.3.2",
     "raster-tile-style": "^1.0.1",
     "react": "15.4.2",
     "react-document-meta": "^2.1.1",
@@ -40,8 +39,10 @@
     "react-router": "^3.0.2",
     "redux": "^3.6.0",
     "sass-loader": "^6.0.1",
+    "superagent": "^3.5.0",
+    "superagent-jsonp": "^0.1.1",
     "viewport-mercator-project": "^3.0.0-beta3",
-    "w3-css": "^2.8.8"
+    "w3-css": "^2.9.7"
   },
   "devDependencies": {
     "babel-core": "6.23.1",
@@ -74,6 +75,7 @@
     "webpack-cleanup-plugin": "^0.4.2",
     "webpack-dev-server": "2.3.0",
     "webworkify": "^1.4.0",
-    "worker-loader": "^0.7.1"
+    "worker-loader": "^0.7.1",
+    "@kadira/storybook": "^2.21.0"
   }
 }

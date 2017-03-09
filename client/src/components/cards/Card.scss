@@ -1,4 +1,8 @@
+//TODO: not working
+// @import '~w3-css/w3.css';
+
 .caption{
+
   font-style: italic;
 }
 
@@ -41,6 +45,18 @@
 
 .flipAnim {
   transform: rotateY(360deg);
+}
+
+.flipBtn {
+  // @extend .w3-button;
+  background-color: initial;
+  float: left;
+}
+
+.closeBtn {
+  // @extend .w3-button;
+  background-color: initial;
+  float: right;
 }
 
 // .flipContainer, .front, .back {
@@ -114,7 +130,7 @@
   color: red;
   text-transform: uppercase;
   // margin: 0 auto;
-  font-size: 30px;
+  // font-size: 24px;
   letter-spacing: -3px;
   // padding: 0 8px;
   opacity: 0.8;
@@ -133,5 +149,4 @@
   // border: 1px solid #000000;
 
 }
-
 

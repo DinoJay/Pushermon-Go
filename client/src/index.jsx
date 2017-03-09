@@ -1,4 +1,5 @@
 import 'font-awesome/css/font-awesome.css';
+import 'w3-css/w3.css';
 
 import React from 'react';
 import { render } from 'react-dom';

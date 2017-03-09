@@ -1,5 +1,8 @@
 import React from 'react';
 // import Immutable from 'immutable';
+import _ from 'lodash';
+import request from 'superagent';
+import jsonp from 'superagent-jsonp';
 
 import MapGL from 'react-map-gl';
 // import rasterTileStyle from 'raster-tile-style';
@@ -49,8 +52,9 @@ export default class App extends React.Component {
         // mapStyle: Immutable.fromJS(mapStyle),
         zoom: 20
       },
-      challenges: [],
-      cardProps: null
+      cards: [],
+      selectedCard: null,
+      currentGeoHash: null
     };
   }
 
@@ -87,75 +91,57 @@ export default class App extends React.Component {
       d => console.log('error cur pos', d),
       { maximumAge: 0, enableHighAccuracy: true });
 
-    this.setState({ curPosId, watchPosId });
+    request
+     .get('/api/data')
+     // .query({ geoHash })
+     .end((err, res) => {
+       this.setState({ curPosId, watchPosId, cards: res.body });
+     });
   }
 
   componentDidUpdate() {
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextState.cards.length !== this.state.cards.length;
+  // }
+
   cardClickHandler(cardProps) {
     console.log('cardProps', cardProps);
-    this.setState({ cardProps });
+    const selectedCard = (<Card
+      {...cardProps}
+      closeHandler={() => this.setState({ selectedCard: null })}
+    />);
+    this.setState({ selectedCard });
   }
 
   _onChangeViewport(viewport) {
     const vp = {
       width: window.innerWidth,
       height: window.innerHeight,
-      latitude: viewport.latitude,
-      longitude: viewport.longitude,
       zoom: viewport.zoom
     };
     // TODO: expose less
     const mapBounds = viewport.map.getBounds();
+    console.log('viewport', viewport);
     //
-    const geoHashes = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng,
-    mapBounds._ne.lat, mapBounds._ne.lng, 6);
+    const geoHash = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng, mapBounds._ne.lat, mapBounds._ne.lng, 6)[0];
 
-    let currentGeoHashes = [];
-    currentGeoHashes.forEach((geohash) => {
-      if (!geoHashes.includes(geohash)) {
-        // Unsubscribe from any hash we've moved out of
-        pusher.unsubscribe(geohash);
-        console.log('Unsubscribe');
-      }
-    });
-    currentGeoHashes = currentGeoHashes
-      .filter(geohash => geoHashes.includes(geohash));
-
-    // const challenges = [];
-    geoHashes.forEach((geohash) => {
-      if (!currentGeoHashes.includes(geohash)) {
-        // Subscribe to any new hashes we've moved into
-        currentGeoHashes.push(geohash);
-        pusher.subscribe(geohash)
-          .bind('encounter', (d) => {
-            console.log('subscribe');
-            if (isInMapBounds(d.coords, mapBounds)) {
-              navigator.vibrate(1000);
-              console.log('d.coords', d.coords);
-              // const ch = {
-              //   latitude: parseFloat(d.coords.latitude),
-              //   longitude: parseFloat(d.coords.longitude)
-              // };
-              d.latitude = parseFloat(d.coords.latitude);
-              d.longitude = parseFloat(d.coords.longitude);
-
-              this.setState({ challenges: [d] });
-              console.log('encounter');
-            } else {
-      // TODO: Show arrow indicators
-            }
+    if (this.state.currentGeoHash !== geoHash) {
+      pusher.unsubscribe(geoHash);
+      pusher.subscribe(geoHash)
+          .bind('notification', (d) => {
+            console.log('notification coming in', d);
           });
-      }
-    });
+    }
 
-    this.setState({
-      viewport: vp
-    });
+
+    const newViewPort = Object.assign({}, this.state.viewport, vp);
+    this.setState({ viewport: newViewPort });
   }
 
   _userMove(pos, point) {
+    console.log('Pos', pos);
     const viewport = Object.assign({}, this.state.viewport, {
       latitude: pos.lat,
       longitude: pos.lng
@@ -186,11 +172,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div key={`${location.pathname}${location.search}`}>
-        <Modal >
-          {!this.state.cardProps ? null :
-          <Card {...this.state.cardProps} closeHandler={() => this.setState({ cardProps: null })} />
-        }
-        </Modal>
+        <Modal content={this.state.selectedCard} />
 
         <MapGL
           {...this.state.viewport}
@@ -203,7 +185,7 @@ export default class App extends React.Component {
           <ChallengesOverlay
             {...this.state.viewport}
             cardClickHandler={this.cardClickHandler.bind(this)}
-            challenges={this.state.challenges}
+            cards={this.state.cards}
           />
           <UserMarkerOverlay
             {...this.state.viewport}

@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Modal = ({ children, closeHandler }) => (
-  <div className={`w3-modal ${children ? 'w3-show' : 'w3-hide'}`}>
+const Modal = ({ content, closeHandler }) => (
+  <div className={`w3-modal ${content ? 'w3-show' : 'w3-hide'}`}>
     <div className="">
       <div className="w3-container">
         <span
@@ -10,20 +10,19 @@ const Modal = ({ children, closeHandler }) => (
         >
                   &times;
                 </span>
-        {children}
+        {content}
       </div>
     </div>
-  </div>
-);
+  </div>);
 
 
 Modal.propTypes = {
-  children: React.PropTypes.element,
+  content: React.PropTypes.element,
   closeHandler: React.PropTypes.func
 };
 
 Modal.defaultProps = {
-  children: <div>ExampleModal</div>,
+  content: <div>ExampleModal</div>,
   closeHandler: () => null
 };
 
