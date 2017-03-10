@@ -15,6 +15,25 @@ const pusher = new Pusher({
   encrypted: true
 });
 
+const dummyData = require("./dummyData");
+
+// const createDummyData = limit => d3.range(limit).map(i => ({
+//   id: i,
+//   text: 'dummy',
+//   completed: false,
+//   title: 'The evil detective',
+//   description: 'You defended the evil detective from taking over the control of the blackmarket!',
+//   place: 'Brussels, Marolles',
+//   contentType: 'Art, Culture, Comics',
+//             // TODO: change in future to component
+//   coords: { 0, 0 },
+//   challenge: 'Quiz',
+//   difficulty: 'hard',
+//   xpPoints: 100,
+//   decksOfFriends: ['Nils', 'Kiran', 'Babba']
+// }));
+
+
 console.log("Pusher", process.env.PUSHER_APP_ID);
 // List of channels that have users subscribed to
 const channels = new Set();
@@ -38,9 +57,7 @@ server.register([require("inert"), require("vision")], (err) => {
     method: "POST",
     path: "/channelhook",
     handler (request, reply) {
-      console.log("channelhook");
-      console.log("handler");
-      console.log("handler");
+      console.log("init channelhook");
       console.log("handler", request.payload);
 
       const webhook = pusher.webhook({
@@ -56,6 +73,7 @@ server.register([require("inert"), require("vision")], (err) => {
       }
 
       webhook.getEvents().forEach((e) => {
+        console.log("event", e);
         if (e.name == "channel_occupied") {
           channels.add(e.channel);
         }
@@ -66,6 +84,16 @@ server.register([require("inert"), require("vision")], (err) => {
     }
   });
 
+  server.route({
+    method: "GET",
+    path: "/api/data",
+    handler (request, reply) {
+      console.log("request", request.query);
+      if (!request.query)
+        reply(dummyData);
+      else reply(dummyData.filter(() => true));
+    }
+  });
   // server.route({
   //   method: 'GET',
   //   path: '/',
@@ -75,15 +103,15 @@ server.register([require("inert"), require("vision")], (err) => {
   // });
 
   // Static resources
-  server.route({
-    method: "GET",
-    path: "/{param*}",
-    handler: {
-      directory: {
-        path: "public"
-      }
-    }
-  });
+  // server.route({
+  //   method: "GET",
+  //   path: "/{param*}",
+  //   handler: {
+  //     directory: {
+  //       path: "public"
+  //     }
+  //   }
+  // });
 });
 
 server.start((err) => {
@@ -92,39 +120,19 @@ server.start((err) => {
   }
   console.log("Server running at:", server.info.uri);
 
-  function nextEncounter() {
+  function notification() {
     const channelArray = Array.from(channels);
+    // TODO: remove random later
     const bounds = channelArray[Math.floor(Math.random() * channelArray.length)];
     if (bounds) {
-      console.log("nextEncounter", bounds);
-      const boundingBox = ngeohash.decode_bbox(bounds);
-      const lngMin = boundingBox[1];
-      const lngMax = boundingBox[3];
-      const latMin = boundingBox[0];
-      const latMax = boundingBox[2];
+      // const boundingBox = ngeohash.decode_bbox(bounds);
+      // const lngMin = boundingBox[1];
+      // const lngMax = boundingBox[3];
+      // const latMin = boundingBox[0];
+      // const latMax = boundingBox[2];
 
-      const longitude = utils.randomNumber(lngMin, lngMax).toFixed(10);
-      const latitude = utils.randomNumber(latMin, latMax).toFixed(10);
-      const duration = utils.randomNumber(30, 300) * 1000;
-
-      const pokemonId = parseInt(utils.randomNumber(1, 250), 10);
-
-      fetch(`http://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
-        .then(res => res.json())
-        .then((pokemon) => {
-          console.log("pokemon", pokemon);
-          const data = {
-            id: pokemonId,
-            name: pokemon.name,
-            sprite: `https://pokeapi.co/media/sprites/pokemon/${pokemonId}.png`,
-            coords: {latitude, longitude},
-            expires: parseInt((new Date()).getTime() + duration, 10),
-            hp: pokemon.stats.find(stat => stat.stat.name === "hp").base_stat,
-            types: pokemon.types.map(type => type.type.name[0] + type.type.name.substring(1))
-          };
-          pusher.trigger(bounds, "encounter", data);
-        });
-
+      pusher.trigger(bounds, "notification");
+      console.log("notification", boundingBox);
           // const data = {
           //   id: 'Quizz',
           //   name: 'Quizz',
@@ -134,8 +142,7 @@ server.start((err) => {
           //   hp: pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat,
           //   types: pokemon.types.map(type => type.type.name[0] + type.type.name.substring(1))
     }
-    setTimeout(nextEncounter, 5000);
   }
 
-  nextEncounter();
+  setTimeout(notification, 5000);
 });

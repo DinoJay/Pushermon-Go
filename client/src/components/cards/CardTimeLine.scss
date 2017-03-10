@@ -1,16 +1,39 @@
+
+.timeLine {
+
+}
+
+.timeLine ul {
+  display: block;
+  list-style-type: none;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-padding-start: 0;
+  overflow: hidden;
+
+}
+
+.timeLine li {
+  // overflow: hidden;
+  // position: absolute;
+}
+
+
 .stack {
   margin: 0 auto;
   position: relative;
   z-index: 1000;
-  // height: 420px;
+  height: 420px;
   padding: 0;
   list-style: none;
   pointer-events: none;
 }
 
-.stack__item {
+.item {
   // overflow: hidden;
-  // position: absolute;
+  position: absolute;
   // opacity: 0;
   // -webkit-touch-callout: none;
   // -webkit-user-select: none;

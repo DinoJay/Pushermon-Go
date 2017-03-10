@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import styl from './Card.scss';
 import colorClasses from '../colorClasses';
 import StarRating from './utils/StarRating';
-import Modal from '../utils/Modal';
+// import Modal from '../utils/Modal';
 
 const mediaTypes = ['game', 'hyperlink', 'photo', 'video'];
 
@@ -120,9 +120,9 @@ const CardFrontPreview = ({ key, title, Controls, tags, xpPoints, img, children 
       </div>
     </section>
     <div className="w3-container">
-      <img className="w3-row-padding w3-col s12 w3-center" style={{ maxHeight: '600px' }} src={img} alt="Card cap" />
+      <img className="w3-row-padding w3-col s12 w3-center" src={img} alt="Card cap" />
     </div>
-    {children}
+    {children || null}
   </div>
   );
 
@@ -146,7 +146,7 @@ CardFrontPreview.defaultProps = {
       <i className="fa fa-retweet" aria-hidden="true" />
     </span>
   </div>,
-  children: <CardFrontDetail />
+  children: []
 };
 
 const CardBack = ({ key, Controls, friends, creator }) => (
@@ -276,5 +276,50 @@ Card.propTypes = {
   closeHandler: React.PropTypes.func
 };
 
+CardFrontPreview.defaultProps = {
+  title: 'Vrije Universiteit Brussel',
+  key: 3,
+  date: '28/04/2012 10:00',
+  tags: ['Uni', 'education'],
+  img: 'https://drive.google.com/uc?export=view&id=1N9Ed6a_CDa8SEMZeLaxULF4FtkHBQf4Feg',
+  caption: 'Main Entrance VUB',
+  xpPoints: 50,
+  // TODO: remove in future to component
+  closeHandler: () => (null),
+  description: "The Vrije Universiteit Brussel is the only Flemish university that has incorporated the principle of 'free inquiry' in its statutes. This principle is based on a text by the French mathematician and natural philosopher Henri Poincaré (1854-1912)",
+  location: { latitude: 50.821705, longitude: 4.395165 },
+  place: 'Pleinlaan 2 - 1050 BRUSSEL',
+  creator: 'Jan',
+  media: [
+    {
+      type: 'hyperlink',
+      name: 'Website',
+      src: 'http://we.vub.ac.be'
+    },
+    {
+      type: 'video',
+      name: "Some of the VUB's international students",
+      src: 'https://www.youtube.com/watch?v=YFCzlOqQW7M'
+    }
+  ],
+  friends: [
+    {
+      user: 'Chauncey',
+      comment: 'here I succeeded my Master studies.'
+    },
+    {
+      user: 'Jan',
+      comment: 'Now, I finally earn money as PhD student at the VUB!'
+    }
+
+  ],
+  rating: [{
+    user: 'Nils',
+    value: 4
+  }
+  ],
+  cardSets: ['scavenger_hunt_vub', 'Brussels_city_tour'],
+  linkedCards: ['Sport_centre_vub', 'ULB_brussels']
+};
 
 export { Card, CardFrontPreview };

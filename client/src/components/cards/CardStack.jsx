@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import * as d3 from 'd3';
-import { Card } from './Card';
-
+import { Card, CardFrontPreview } from './Card';
 
 import styles from './CardStack.scss';
+
+import dummyData from '../../../../server/dummyData';
 
 // TODO: change, too complex
 // const margin = x => (x ** 2) / (-2.02244 + (0.256652 * x) + (0.00492707 * (x ** 2)));
@@ -27,7 +28,7 @@ const StackItem = (props) => {
       className={`w3-threequarter ${styles.stack__item} ${styles['stack__item--current']}`}
       style={style}
     >
-      <Card {...props} closeHandler={props.closeHandler} />
+      {props.children}
     </li>
   );
 };
@@ -39,7 +40,8 @@ StackItem.propTypes = {
 
 StackItem.defaultProps = {
   z: 0,
-  closeHandler: a => a
+  closeHandler: a => a,
+  children: <Card />
 };
 
 
@@ -57,7 +59,9 @@ class Stack extends React.Component {
         {...ch}
         z={this.state.cards.length - i}
         closeHandler={updState}
-      />
+      >
+        {this.props.children}
+      </StackItem>
     );
     return (
       <div style={null}>
@@ -65,8 +69,7 @@ class Stack extends React.Component {
           className={`row ${styles.stack} ${styles['stack--yuda']}`}
           style={{
             perspective: '500px',
-            perspectiveOrigin: `50% ${-50}%`,
-            marginTop: `${75}px`
+            perspectiveOrigin: `50% ${-50}%`
           }}
         >
           {this.state.cards.length > 0 ? Items : <div> No collected cards!</div>}
@@ -81,6 +84,11 @@ Stack.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.number.isRequired
   }).isRequired).isRequired
+};
+
+Stack.defaultProps = {
+  cards: dummyData,
+  children: <CardFrontPreview />
 };
 
 export default Stack;

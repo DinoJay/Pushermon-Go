@@ -73,6 +73,8 @@ module.exports = {
     extensions: ['.js', '.jsx'],
     alias: {
       'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
+      // TODO
+      // src$: './src'
     }
   },
   module: {
