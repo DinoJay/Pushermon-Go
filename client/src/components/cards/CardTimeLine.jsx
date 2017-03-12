@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import * as d3 from 'd3';
 import labella from 'labella';
 
-import { CardFrontPreview } from './Card';
+import { CardMini } from './Card';
 import CardStack from './CardStack';
 
 import styles from './CardTimeLine.scss';
@@ -26,7 +26,7 @@ const Entry = (props) => {
       className={`${styles.item}`}
       style={style}
     >
-      <CardStack {...props} />
+      <CardStack {...props} ><CardMini /></CardStack>
     </li>
   );
 };
@@ -48,6 +48,7 @@ Entry.defaultProps = {
 class TimeLine extends React.Component {
   constructor({ cards, width, height }) {
     super({ cards, width, height });
+
     const cs = cards.map((c) => {
       c.date = parseDate(c.date);
       return c;
@@ -62,8 +63,7 @@ class TimeLine extends React.Component {
       c.node = new labella.Node(c.y, Entry.defaultProps.height, c);
     });
 
-
-    const nodes = new labella.Force({
+    new labella.Force({
       minPos: -10
     })
      .nodes(cs.map(c => c.node))
@@ -71,25 +71,15 @@ class TimeLine extends React.Component {
 
     // renderer.layout(nodes);
 
-    console.log('force nodes', cs);
-
     this.state = {
       cards: cs
     };
-    console.log('state', this.state);
   }
 
   componentDidMount() {
   }
 
   componentDidUpdate() {
- // ---------------------------------------------------
-
-
-//---------------------------------------------------
-// Labella has utility to help rendering
-//---------------------------------------------------
-
   }
 
   render () {

@@ -35,12 +35,11 @@ const StackItem = (props) => {
 
 StackItem.propTypes = {
   z: PropTypes.number.isRequired,
-  closeHandler: PropTypes.func
+  children: PropTypes.element
 };
 
 StackItem.defaultProps = {
   z: 0,
-  closeHandler: a => a,
   children: <Card />
 };
 
@@ -60,8 +59,9 @@ class Stack extends React.Component {
         z={this.state.cards.length - i}
         closeHandler={updState}
       >
-        {this.props.children}
+        {React.cloneElement(this.props.children, ch) }
       </StackItem>
+
     );
     return (
       <div style={null}>
@@ -81,6 +81,7 @@ class Stack extends React.Component {
 
 
 Stack.propTypes = {
+  children: PropTypes.element,
   cards: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.number.isRequired
   }).isRequired).isRequired

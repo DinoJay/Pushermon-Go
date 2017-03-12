@@ -124,7 +124,7 @@ const CardFrontPreview = ({ key, title, Controls, tags, xpPoints, img, children 
     </div>
     {children || null}
   </div>
-  );
+);
 
 CardFrontPreview.propTypes = {
   // id: React.PropTypes.number,
@@ -140,14 +140,41 @@ CardFrontPreview.propTypes = {
 CardFrontPreview.defaultProps = {
   key: 'asa',
   title: 'TEST CARD TITLE',
+  tags: ['cat1', 'tag2', 'tag3'],
   Controls: <div className="w3-container">
     <span onClick={a => a} className="w3-closebtn">&times;</span>
     <span onClick={a => a} className="w3-closebtn">
       <i className="fa fa-retweet" aria-hidden="true" />
     </span>
   </div>,
+  img: 'http://glintdemoz.com/timelylife/assets/attached_files/190_2016_06_11_12_24_44_testtest.jpg',
   children: []
 };
+
+const CardMini = ({ key, title, tags, xpPoints, img }) => (
+  <div key={key} className={`w3-card-4 ${colorClass()}`} >
+    <section className="w3-container">
+      <h4>{title}</h4>
+      <div className="w3-row">
+        <div className="w3-col s4">
+          <span className="w3-badge w3-round w3-green" >Exp {xpPoints}</span>
+        </div>
+        <div className="w3-col s8 w3-right-align">
+          {tags.map(t => <span
+            key={t} className={`w3-tag ${colorClass()}`} style={{ float: 'right' }}
+          >{t}</span>)}
+        </div>
+      </div>
+    </section>
+    <div className="w3-container">
+      <img className=" w3-col s12 w3-center" src={img} alt="Card cap" />
+    </div>
+  </div>
+);
+
+CardMini.propTypes = CardFrontPreview.propTypes;
+CardMini.defaultProps = CardFrontPreview.defaultProps;
+
 
 const CardBack = ({ key, Controls, friends, creator }) => (
   <div key={key} className={'w3-card-4 w3-sand'} >
@@ -222,18 +249,22 @@ const Controls = ({ flipHandler, closeHandler }) => (
   </div>
 );
 
+const CollectButton = () => (
+  <div className="w3-padding">
+    <button
+      onClick={() => alert('MiniGame')}
+      className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}
+    >
+      <span style={{ marginLeft: '10px' }}> Collect! </span>
+      <i className="fa fa-lock" aria-hidden="true" />
+    </button>
+  </div>
+);
+
 const CardFront = props =>
   <CardFrontPreview {...props}>
     <CardFrontDetail {...props} />
-    <div className="w3-padding">
-      <button
-        onClick={() => alert('MiniGame')}
-        className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}
-      >
-        <span style={{ marginLeft: '10px' }}> Collect! </span>
-        <i className="fa fa-lock" aria-hidden="true" />
-      </button>
-    </div>
+    <CollectButton />
   </CardFrontPreview>;
 
 class Card extends React.Component {
@@ -254,10 +285,15 @@ class Card extends React.Component {
           {...this.props}
           Controls={
             <Controls flipHandler={flipHandler} {...this.props} />
-      }
+          }
         />);
     } else {
-      ToggleCard = <CardBack {...this.props} Controls={<Controls flipHandler={flipHandler} {...this.props} />} />;
+      ToggleCard = (
+        <CardBack
+          {...this.props} Controls={
+            <Controls flipHandler={flipHandler} {...this.props} />
+        }
+        />);
     }
 
     return (
@@ -286,7 +322,7 @@ CardFrontPreview.defaultProps = {
   xpPoints: 50,
   // TODO: remove in future to component
   closeHandler: () => (null),
-  description: "The Vrije Universiteit Brussel is the only Flemish university that has incorporated the principle of 'free inquiry' in its statutes. This principle is based on a text by the French mathematician and natural philosopher Henri Poincaré (1854-1912)",
+  description: 'description',
   location: { latitude: 50.821705, longitude: 4.395165 },
   place: 'Pleinlaan 2 - 1050 BRUSSEL',
   creator: 'Jan',
@@ -322,4 +358,4 @@ CardFrontPreview.defaultProps = {
   linkedCards: ['Sport_centre_vub', 'ULB_brussels']
 };
 
-export { Card, CardFrontPreview };
+export { Card, CardFrontPreview, CardMini };
