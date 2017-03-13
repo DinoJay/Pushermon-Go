@@ -10,14 +10,14 @@ const Modal = ({ content, closeHandler }) => (
         >
                   &times;
                 </span>
-        {content}
+        {content || null}
       </div>
     </div>
   </div>);
 
 
 Modal.propTypes = {
-  content: React.PropTypes.element,
+  content: React.PropTypes.element || false,
   closeHandler: React.PropTypes.func
 };
 

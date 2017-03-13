@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { toggleChallenge } from '../actions';
-import CardStack from '../components/cards/CardTimeLine';
+import CardTimeLine from '../components/cards/CardTimeLine';
 
 const getVisibleChallenges = (cards, filter) => {
   switch (filter) {
@@ -27,5 +27,5 @@ const mapDispatchToProps = dispatch => ({
 const VisibleCardList = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CardStack);
+)(CardTimeLine);
 export default VisibleCardList;

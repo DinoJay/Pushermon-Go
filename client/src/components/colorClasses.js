@@ -12,7 +12,7 @@ export default [
   'w3-green',
   'w3-light-green',
   'w3-lime',
-  'w3-sand',
+  // 'w3-sand',
   'w3-khaki',
   'w3-yellow',
   'w3-amber',
@@ -22,9 +22,9 @@ export default [
   'w3-brown',
   'w3-light-grey',
   'w3-grey',
-  'w3-dark-grey',
-  'w3-pale-red',
-  'w3-pale-yellow',
-  'w3-pale-green',
-  'w3-pale-blue'
+  'w3-dark-grey'
+  // 'w3-pale-red',
+  // 'w3-pale-yellow',
+  // 'w3-pale-green',
+  // 'w3-pale-blue'
 ];

@@ -4,7 +4,7 @@ import { Card, CardFrontPreview } from './Card';
 
 import styles from './CardStack.scss';
 
-import dummyData from '../../../../server/dummyData';
+// import dummyData from '../../../../server/dummyData';
 
 // TODO: change, too complex
 // const margin = x => (x ** 2) / (-2.02244 + (0.256652 * x) + (0.00492707 * (x ** 2)));
@@ -19,13 +19,14 @@ const StackItem = (props) => {
   const style = {
     opacity: 1,
     pointerEvents: 'auto',
+    position: 'absolute',
     // zIndex: z,
-    transform: `translate3d(0px, 0px, ${props.z * -50}px)`
+    transform: `translate3d(0, 0, ${props.z * 30}px)`
   };
 
   return (
     <li
-      className={`w3-threequarter ${styles.stack__item} ${styles['stack__item--current']}`}
+      className={`${styles.stack__item} ${styles['stack__item--current']}`}
       style={style}
     >
       {props.children}
@@ -52,29 +53,32 @@ class Stack extends React.Component {
     };
   }
   render () {
-    const updState = () => this.setState(prevState => ({ cards: prevState.cards.slice(0, prevState.cards.length - 1) }));
+    const discardHandler = () => this.setState((prevState) => {
+      const lastIndex = prevState.cards.length - 1;
+      return ({
+        cards: [prevState.cards[lastIndex]].concat(prevState.cards.slice(0, lastIndex))
+      });
+    });
     const Items = this.state.cards.map((ch, i) =>
       <StackItem
         {...ch}
         z={this.state.cards.length - i}
-        closeHandler={updState}
       >
-        {React.cloneElement(this.props.children, ch) }
+        {React.cloneElement(this.props.event(ch.type), { ...ch, discardHandler })}
       </StackItem>
 
     );
     return (
-      <div style={null}>
-        <ul
-          className={`row ${styles.stack} ${styles['stack--yuda']}`}
-          style={{
-            perspective: '500px',
-            perspectiveOrigin: `50% ${-50}%`
-          }}
-        >
-          {this.state.cards.length > 0 ? Items : <div> No collected cards!</div>}
-        </ul>
-      </div>
+      <ul
+        className={`row ${styles.stack} ${styles['stack--yuda']}`}
+        style={{
+          perspective: '500px',
+          perspectiveOrigin: `50% ${-50}%`,
+          position: 'relative'
+        }}
+      >
+        {this.state.cards.length > 0 ? Items : <div> No collected cards!</div>}
+      </ul>
     );
   }
 }
@@ -88,7 +92,7 @@ Stack.propTypes = {
 };
 
 Stack.defaultProps = {
-  cards: dummyData,
+  cards: [],
   children: <CardFrontPreview />
 };
 

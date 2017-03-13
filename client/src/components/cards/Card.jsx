@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'react';
 import * as d3 from 'd3';
 
 import styl from './Card.scss';
@@ -20,20 +21,12 @@ const colorScale = d3.scaleLinear()
 
 const colorClass = () => colorScale(Math.random() * 30);
 
-
 class CardFrontDetail extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      modalOpen: false
-    };
   }
   render () {
     const { caption, location, description, media, cardSets, linkedCards, place } = this.props;
-    if (this.state.modalOpen) {
-      alert('MiniGame to acquire card!');
-      this.setState({ modalOpen: !this.state.modalOpen });
-    }
     return (
       <div>
         <div className={`w3-margin w3-center ${styl.caption}`}>{caption}</div>
@@ -151,28 +144,38 @@ CardFrontPreview.defaultProps = {
   children: []
 };
 
-const CardMini = ({ key, title, tags, xpPoints, img }) => (
-  <div key={key} className={`w3-card-4 ${colorClass()}`} >
+const CardMini = props => (
+  <div key={props.key} style={{ width: '200px', height: '300px' }} className={`w3-card-4 ${colorClass()}`} >
+    <div>
+      <span onClick={() => props.zoomHandler(props)} className={`${styl.flipBtn} w3-btn`}>
+        <i className="fa fa-search fa-lg" aria-hidden="true" />
+      </span>
+      <span onClick={props.discardHandler} className={`${styl.closeBtn} w3-btn`}>
+        <i className="fa fa-retweet fa-lg" aria-hidden="true" />
+      </span>
+    </div>
     <section className="w3-container">
-      <h4>{title}</h4>
+      <h4>{props.title}</h4>
       <div className="w3-row">
         <div className="w3-col s4">
-          <span className="w3-badge w3-round w3-green" >Exp {xpPoints}</span>
+          <span className="w3-badge w3-round w3-green" >Exp {props.xpPoints}</span>
         </div>
         <div className="w3-col s8 w3-right-align">
-          {tags.map(t => <span
+          {props.tags.map(t => <span
             key={t} className={`w3-tag ${colorClass()}`} style={{ float: 'right' }}
           >{t}</span>)}
         </div>
       </div>
     </section>
     <div className="w3-container">
-      <img className=" w3-col s12 w3-center" src={img} alt="Card cap" />
+      <img style={{ height: '100px' }} className=" w3-col s12 w3-center" src={props.img} alt="Card cap" />
     </div>
   </div>
 );
 
 CardMini.propTypes = CardFrontPreview.propTypes;
+CardMini.propTypes.zoomHandler = PropTypes.func;
+CardMini.propTypes.closeHandler = PropTypes.func;
 CardMini.defaultProps = CardFrontPreview.defaultProps;
 
 
@@ -249,14 +252,14 @@ const Controls = ({ flipHandler, closeHandler }) => (
   </div>
 );
 
-const CollectButton = () => (
+const CollectButton = ({ collected }) => (
   <div className="w3-padding">
     <button
       onClick={() => alert('MiniGame')}
       className={`w3-padding w3-btn w3-block w3-xxlarge w3-round ${colorClass()}`}
     >
-      <span style={{ marginLeft: '10px' }}> Collect! </span>
-      <i className="fa fa-lock" aria-hidden="true" />
+      <span style={{ marginLeft: '10px' }}> {`${collected ? 'RePlay' : 'Collect'}!`}</span>
+      { collected || <i className="fa fa-lock" aria-hidden="true" /> }
     </button>
   </div>
 );
@@ -264,7 +267,7 @@ const CollectButton = () => (
 const CardFront = props =>
   <CardFrontPreview {...props}>
     <CardFrontDetail {...props} />
-    <CollectButton />
+    <CollectButton {...props} />
   </CardFrontPreview>;
 
 class Card extends React.Component {

@@ -1,4 +1,4 @@
 {
   "presets": ["latest", "react"],
-  "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel"]
+  "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-decorators-legacy", "transform-class-properties", "react-hot-loader/babel", "transform-do-expressions"]
 }
