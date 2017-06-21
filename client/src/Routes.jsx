@@ -37,7 +37,6 @@ const indexRoute = route => Object.assign({}, route, { path: null });
 
 export const LinkHelper = ({ to, ...props }) => {
   if (!routes[to]) throw new Error(`Route to '${to}' not found`);
-  console.log('props', to);
   return (
     <Link to={routes[to].path} {...props}>
       { props.children || routes[to].label }

@@ -5,7 +5,6 @@ import VisibleTodoList from '../containers/VisibleTodoList';
 
 export default () => (
   <div className="w3-container">
-    <Header />
     <VisibleTodoList />
   </div>
 );

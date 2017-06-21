@@ -15,32 +15,49 @@ import styles from './CardStack.scss';
 
 // <li class="stack__item stack__item--current" >
 
-const StackItem = (props) => {
+const Frame = (props) => {
+  let pos = {};
+  if (props.x) {
+    pos = { left: `${props.x}px` };
+  } else if (props.y) {
+    pos = { top: `${props.y}px` };
+  }
+
   const style = {
     opacity: 1,
     pointerEvents: 'auto',
-    position: 'absolute',
+    position: 'absolute'
     // zIndex: z,
-    transform: `translate3d(0, 0, ${props.z * 30}px)`
+    // transform: `translate3d(${props.x}, ${props.y}px, ${props.z}px)`
+    // left: `${props.x}px`,
   };
+  const trans = { transition: `0.2s ${props.x ? 'left' : 'top'}, 0.2s background-position, 0.1s border-color` };
 
   return (
+
     <li
-      className={`${styles.stack__item} ${styles['stack__item--current']}`}
-      style={style}
+      className={styles.stack__item}
+      style={{ ...style, ...pos, ...trans }}
+      onMouseEnter={() => props.hoverHandler(props.index)}
+      onMouseLeave={() => props.hoverHandler(props.index)}
     >
       {props.children}
     </li>
   );
 };
 
-StackItem.propTypes = {
-  z: PropTypes.number.isRequired,
-  children: PropTypes.element
+Frame.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  hoverHandler: PropTypes.func.isRequired,
+  children: PropTypes.element,
+  index: PropTypes.number.isRequired
 };
 
-StackItem.defaultProps = {
+Frame.defaultProps = {
   z: 0,
+  x: 0,
+  y: 0,
   children: <Card />
 };
 
@@ -48,34 +65,43 @@ StackItem.defaultProps = {
 class Stack extends React.Component {
   constructor(props) {
     super(props);
+    this.hoverHandler = this._hoverHandler.bind(this);
     this.state = {
-      cards: props.cards
+      cards: props.cards,
+      focussedFrame: null
     };
   }
+
+  _hoverHandler(index) {
+    this.setState(prevState => ({ focussedFrame: prevState.focussedFrame !== index ? index : null }));
+  }
+
   render () {
-    const discardHandler = () => this.setState((prevState) => {
-      const lastIndex = prevState.cards.length - 1;
-      return ({
-        cards: [prevState.cards[lastIndex]].concat(prevState.cards.slice(0, lastIndex))
-      });
-    });
-    const Items = this.state.cards.map((ch, i) =>
-      <StackItem
-        {...ch}
-        z={this.state.cards.length - i}
-      >
-        {React.cloneElement(this.props.event(ch.type), { ...ch, discardHandler })}
-      </StackItem>
+    let pos = 0;
+    const Items = this.state.cards.map((ch, i) => {
+      let offset = 0;
+      // TODO: edge cases
+      const focussedFrame = this.state.focussedFrame;
+      if (focussedFrame && focussedFrame > i) offset = -250;
+      if (focussedFrame && focussedFrame < i) offset = 250;
+
+      pos = this.props.scale(i) + offset;
+      return (
+        <Frame
+          x={pos}
+          z={this.state.cards.length - i}
+          hoverHandler={this.hoverHandler}
+          index={i}
+        >
+          {React.cloneElement(this.props.element,
+            { ...ch, index: i, hoverHandler: this.hoverHandler })}
+        </Frame>);
+    }
 
     );
     return (
       <ul
         className={`row ${styles.stack} ${styles['stack--yuda']}`}
-        style={{
-          perspective: '500px',
-          perspectiveOrigin: `50% ${-50}%`,
-          position: 'relative'
-        }}
       >
         {this.state.cards.length > 0 ? Items : <div> No collected cards!</div>}
       </ul>
@@ -85,7 +111,8 @@ class Stack extends React.Component {
 
 
 Stack.propTypes = {
-  children: PropTypes.element,
+  element: PropTypes.element,
+  scale: PropTypes.func,
   cards: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.number.isRequired
   }).isRequired).isRequired
@@ -93,7 +120,8 @@ Stack.propTypes = {
 
 Stack.defaultProps = {
   cards: [],
-  children: <CardFrontPreview />
+  element: <CardFrontPreview />,
+  scale: () => 0
 };
 
 export default Stack;

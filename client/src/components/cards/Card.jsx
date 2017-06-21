@@ -32,7 +32,6 @@ class CardFrontDetail extends React.Component {
         <div className={`w3-margin w3-center ${styl.caption}`}>{caption}</div>
         <section className="w3-container">
           <table className="w3-table w3-striped w3-bordered">
-            <tbody>
               <tr className="">
                 <td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td>
               </tr>
@@ -62,7 +61,6 @@ class CardFrontDetail extends React.Component {
                 <td>linked Cards</td>
                 <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
               </tr>
-            </tbody>
           </table>
         </section>
       </div>

@@ -1,5 +1,6 @@
 const ArthurDeGreefCard = {
   title: 'The peculiar story of Arthur De Greef',
+  type: 'card',
   date: '28/04/2012 10:00',
   key: 0,
   tags: ['Art', 'Culture', 'Music'],
@@ -48,10 +49,50 @@ const ArthurDeGreefCard = {
   linkedCards: ['Frank Liszt', 'Music school Arthur de Greef']
 };
 
+const MapEvent = {
+  title: 'The peculiar story of Arthur De Greef',
+  type: 'map',
+  date: '27/04/2012 10:00',
+  key: 100,
+  // tags: ['Art', 'Culture', 'Music'],
+  // img: 'https://drive.google.com/uc?export=view&id=1N9Ed6a_CDa8SEMZeLaxULF4FtkHBQf4Feg',
+  xpPoints: 100,
+  // TODO: remove in future to component
+  // closeHandler: () => (null),
+  // caption: 'A statue of Arthur de Greef',
+  // description: 'Pianist Arthur De Greef born in Louvain. He was a pupil of Frank Liszt. I do not why there is statue is placed here. There is music school with the same name not far.',
+  location: { latitude: 50.828797, longitude: 4.352191 },
+  place: 'Park next to my Home',
+  // creator: 'Jan',
+  cardSets: ['european_composers'],
+  linkedCards: ['Frank Liszt', 'Music school Arthur de Greef']
+};
+
+
+const MapEvent1 = {
+  title: 'The peculiar story of Arthur De Greef',
+  type: 'map',
+  date: '27/04/2012 11:00',
+  key: 10,
+  // tags: ['Art', 'Culture', 'Music'],
+  // img: 'https://drive.google.com/uc?export=view&id=1N9Ed6a_CDa8SEMZeLaxULF4FtkHBQf4Feg',
+  xpPoints: 100,
+  // TODO: remove in future to component
+  // closeHandler: () => (null),
+  // caption: 'A statue of Arthur de Greef',
+  // description: 'Pianist Arthur De Greef born in Louvain. He was a pupil of Frank Liszt. I do not why there is statue is placed here. There is music school with the same name not far.',
+  location: { latitude: 50.828797, longitude: 4.352191 },
+  place: 'Park next to my Home',
+  // creator: 'Jan',
+  cardSets: ['european_composers'],
+  linkedCards: ['Frank Liszt', 'Music school Arthur de Greef']
+};
+
 
 const FranzLisztCard = {
   title: 'The life of Frank Liszt',
   date: '24/04/2012 10:00',
+  type: 'card',
   key: 1,
   tags: ['Art', 'Culture', 'classic', 'music'],
   img: 'http://www.wagner-heavymetal.com/uploads/4/4/7/3/44734409/5792753_orig.gif',
@@ -86,7 +127,8 @@ const FranzLisztCard = {
 const jimiHendrixCard = {
   title: 'Jimi Hendrix in Belgium',
   key: 2,
-  date: '11/04/2012 10:00',
+  type: 'card',
+  date: '01/04/2012 10:00',
   tags: ["Rock 'n ' Roll", 'Culture', 'music'],
   img: 'http://www.memoire60-70.be/Images/Chronique_1966_1972/Jimi_Hendrix_Belgium_67.jpg',
   caption: 'Jimi Hendrix au Twenty Club - 5 mars 1967',
@@ -137,9 +179,30 @@ const jimiHendrixCard = {
 };
 
 
+const notification = {
+  title: 'Jimi Hendrix in Belgium',
+  key: 2,
+  type: 'notification',
+  date: '02/04/2012 10:00',
+  tags: ["Rock 'n ' Roll", 'Culture', 'music'],
+  img: 'http://www.memoire60-70.be/Images/Chronique_1966_1972/Jimi_Hendrix_Belgium_67.jpg',
+  caption: 'Jimi Hendrix au Twenty Club - 5 mars 1967',
+  xpPoints: 50,
+  // TODO: remove in future to component
+  closeHandler: () => (null),
+  description: 'The first pop star of classical music. He made girls cry with his virtuosic piano play. Much like Jimi hendrix he redefined the way to play his instrument',
+  location: { latitude: 50.893793, longitude: 4.352083 },
+  place: 'Amerikaans Theater',
+  creator: 'Jan',
+  cardSets: ['european_composers', 'Music challenge'],
+  linkedCards: ['Frank Liszt', 'Music school Arthur de Greef']
+};
+
+
 const VUBcard = {
   title: 'Vrije Universiteit Brussel',
   key: 3,
+  type: 'card',
   date: '28/04/2012 10:00',
   tags: ['Uni', 'education'],
   img: 'https://drive.google.com/uc?export=view&id=1N9Ed6a_CDa8SEMZeLaxULF4FtkHBQf4Feg',
@@ -185,6 +248,7 @@ const VUBcard = {
 
 const VUBSports = {
   title: 'Sport center VUB',
+  type: 'card',
   key: 4,
   date: '04/04/2012 10:00',
   tags: ['Uni', 'sports'],
@@ -224,4 +288,4 @@ const VUBSports = {
 };
 
 
-module.exports = [jimiHendrixCard, ArthurDeGreefCard, FranzLisztCard, VUBcard, VUBSports];
+module.exports = [notification, MapEvent, jimiHendrixCard, ArthurDeGreefCard, FranzLisztCard, VUBcard, VUBSports];

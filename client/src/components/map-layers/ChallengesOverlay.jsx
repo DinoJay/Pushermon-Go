@@ -28,8 +28,6 @@ export default class ChalllengesOverlay extends React.Component {
             key={c.key}
             className={`${styles.card} w3-button`}
             style={{
-              width: `${width}px`,
-              height: `${height}px`,
               transform: `translate(${pixel[0] - (width / 2)}px, ${pixel[1] - (height / 2)}px)`
             }}
             onTouchStart={() => self.cardClickHandler(c)}
