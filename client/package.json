@@ -21,6 +21,7 @@
     "bootstrap": "^4.0.0-alpha.5",
     "colors.css": "^3.0.0",
     "d3": "^4.5.0",
+    "d3-force-surface": "^0.4.4",
     "dsv-loader": "^2.0.0",
     "font-awesome": "^4.7.0",
     "immutable": "^3.8.1",

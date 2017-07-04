@@ -81,7 +81,7 @@ export default class MainLayout extends Component {
             <LinkHelper to="App" {...navLinkProps} onClick={this.handleClick} />
             <LinkHelper to="Challenge" {...navLinkProps} onClick={this.handleClick} />
           </div>
-          <div className="layout__content">
+          <div className="layout__content" style={{ overflow: 'hidden' }}>
             {children}
           </div>
         </div>

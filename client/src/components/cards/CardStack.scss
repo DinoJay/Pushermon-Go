@@ -8,6 +8,12 @@
   pointer-events: none;
 }
 
+
+.bboxLine {
+  stroke: black;
+  stroke-width: 5;
+}
+
 .stack__item {
   transition: 0.2s top, 0.2s background-position, 0.1s border-color;
   // overflow: hidden;

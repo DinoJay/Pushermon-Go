@@ -32,35 +32,35 @@ class CardFrontDetail extends React.Component {
         <div className={`w3-margin w3-center ${styl.caption}`}>{caption}</div>
         <section className="w3-container">
           <table className="w3-table w3-striped w3-bordered">
-              <tr className="">
-                <td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td>
-              </tr>
-              <tr><td>Description:</td><td>
-                <div className={styl.textClamp}>{description}</div>
-              </td>
-              </tr>
-              <tr className=""><td>Media</td>
-                <td>
-                  <div className="w3-row">
-                    {media.map(m =>
-                      <div key={m.src}>
-                        <span className="w3-col" style={{ width: '20px' }}>
-                          <i className={`fa ${mediaScale(m.type)} fa-3 w3-margin-right`} aria-hidden="true" />
-                        </span>
-                        <span className="w3-rest"> <a href={m.src}> { m.name } </a></span>
-                      </div>
+            <tr className="">
+              <td>Location:</td><td>{`${place} (${Object.values(location).join(',')})`}</td>
+            </tr>
+            <tr><td>Description:</td><td>
+              <div className={styl.textClamp}>{description}</div>
+            </td>
+            </tr>
+            <tr className=""><td>Media</td>
+              <td>
+                <div className="w3-row">
+                  {media.map(m =>
+                    <div key={m.src}>
+                      <span className="w3-col" style={{ width: '20px' }}>
+                        <i className={`fa ${mediaScale(m.type)} fa-3 w3-margin-right`} aria-hidden="true" />
+                      </span>
+                      <span className="w3-rest"> <a href={m.src}> { m.name } </a></span>
+                    </div>
                   )}
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Card Sets</td>
-                <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
-              </tr>
-              <tr>
-                <td>linked Cards</td>
-                <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
-              </tr>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Card Sets</td>
+              <td> {cardSets.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+            </tr>
+            <tr>
+              <td>linked Cards</td>
+              <td> {linkedCards.map(c => <span key={c} className={`w3-tag ${colorClass()}`}>{c}</span>)} </td>
+            </tr>
           </table>
         </section>
       </div>
@@ -98,14 +98,14 @@ const CardFrontPreview = ({ key, title, Controls, tags, xpPoints, img, children 
   <div key={key} className={`w3-card-4 ${colorClass()}`} >
     {Controls}
     <section className="w3-margin w3-container">
-      <h2>{title}</h2>
+      <h3>{title}</h3>
       <div className="w3-row">
         <div className="w3-col s4">
-          <span className="w3-badge w3-round w3-xlarge w3-green" >Exp {xpPoints}</span>
+          <span className="w3-badge w3-round w3-large w3-green" >Exp {xpPoints}</span>
         </div>
         <div className="w3-col s8 w3-right-align">
           {tags.map(t => <span
-            key={t} className={`w3-tag w3-xlarge ${colorClass()}`} style={{ float: 'right' }}
+            key={t} className={`w3-tag w3-large ${colorClass()}`} style={{ float: 'right' }}
           >{t}</span>)}
         </div>
       </div>
@@ -143,7 +143,7 @@ CardFrontPreview.defaultProps = {
 };
 
 const CardMini = props => (
-  <div key={props.key} style={{ width: '200px', height: '300px' }} className={`w3-card-4 ${colorClass()}`} >
+  <div key={props.key} style={{ width: '180px', height: '220px' }} className={`w3-card-4 ${colorClass()}`} >
     <div>
       <span onClick={() => props.zoomHandler(props)} className={`${styl.flipBtn} w3-btn`}>
         <i className="fa fa-search fa-lg" aria-hidden="true" />
@@ -153,26 +153,18 @@ const CardMini = props => (
       </span>
     </div>
     <section className="w3-container">
-      <h4>{props.title}</h4>
-      <div className="w3-row">
-        <div className="w3-col s4">
-          <span className="w3-badge w3-round w3-green" >Exp {props.xpPoints}</span>
-        </div>
-        <div className="w3-col s8 w3-right-align">
-          {props.tags.map(t => <span
-            key={t} className={`w3-tag ${colorClass()}`} style={{ float: 'right' }}
-          >{t}</span>)}
-        </div>
-      </div>
+      <h5>{props.title}</h5>
     </section>
     <div className="w3-container">
-      <img style={{ height: '100px' }} className=" w3-col s12 w3-center" src={props.img} alt="Card cap" />
+      <img
+        style={{ height: '80px' }} className=" w3-col s12 w3-center"
+        src={props.img} alt="Card cap"
+      />
     </div>
   </div>
 );
 
 CardMini.propTypes = CardFrontPreview.propTypes;
-CardMini.propTypes.zoomHandler = PropTypes.func;
 CardMini.propTypes.closeHandler = PropTypes.func;
 CardMini.defaultProps = CardFrontPreview.defaultProps;
 
