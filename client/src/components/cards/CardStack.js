@@ -18,22 +18,24 @@ import styles from './CardStack.scss';
 // <li class="stack__item stack__item--current" >
 
 const Frame = (props) => {
-  let pos = {};
-  if (props.horizontal) {
-    pos = { left: `${props.pos}px` };
-  } else if (props.vertical) {
-    pos = { top: `${props.pos}px` };
-  }
+  const pos = {};
+  // if (props.horizontal) {
+  //   if (props.top) { pos = { left: `${props.pos}px` }; } else pos = { left: `${props.pos}px`, top: 100 };
+  // } else if (props.vertical) {
+  //   pos = { top: `${props.pos}px`, right: props.right ? 0 : null };
+  // }
+
 
   const style = {
     opacity: 1,
     pointerEvents: 'auto',
-    position: 'absolute'
+    position: 'absolute',
+    ...props.orientation
     // zIndex: z,
     // transform: `translate3d(${props.x}, ${props.y}px, ${props.z}px)`
     // left: `${props.x}px`,
   };
-  const trans = { transition: `0.2s ${props.x ? 'left' : 'top'}, 0.2s background-position, 0.1s border-color` };
+  const trans = { transition: `0.2s ${props.horizontal ? 'left' : 'top'}, 0.2s background-position, 0.1s border-color` };
 
   return (
     <li
@@ -48,17 +50,18 @@ const Frame = (props) => {
 };
 
 Frame.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
+  vertical: PropTypes.bool,
+  pos: PropTypes.number,
+  horizontal: PropTypes.bool,
   hoverHandler: PropTypes.func.isRequired,
   children: PropTypes.element,
   index: PropTypes.number.isRequired
 };
 
 Frame.defaultProps = {
-  z: 0,
-  x: 0,
-  y: 0,
+  vertical: true,
+  horizontal: true,
+  pos: 0,
   children: <Card />
 };
 
@@ -129,29 +132,51 @@ class Stack extends React.Component {
         .domain(dom)
         .range([0, size]);
 
-    const newCards = this.props.cards.map((ch, i) => {
+    const positions = [];
+    const ItemsLeft = this.props.cards.map((ch, i) => {
       let offset = 0;
       const focussedFrame = this.props.focussedFrame;
       if (focussedFrame && focussedFrame > i) offset = -250;
       if (focussedFrame && focussedFrame < i) offset = 250;
-      ch.pos = scale(i) + offset;
-      return ch;
-    });
+      const pos = scale(i) + offset;
+      positions.push(pos);
 
-    const Items = this.props.cards.map((ch, i) => (
-      <Frame
-        pos={newCards[i].pos}
+      const orientation = this.props.horizontal ? { left: `${pos}px` } : { top: `${pos}px` };
+
+      return (<Frame
         {...this.props}
         z={this.props.cards.length - i}
+        orientation={orientation}
         hoverHandler={(index) => {
-          this.props.hoverHandler(index, newCards);
+          // this.props.hoverHandler(index);
         }}
         index={i}
       >
         {React.cloneElement(this.props.element, { ...ch })}
-      </Frame>
-    )
-);
+      </Frame>);
+    });
+
+    const ItemsRight = this.props.cards.map((ch, i) => {
+      let offset = 0;
+      const focussedFrame = this.props.focussedFrame;
+      if (focussedFrame && focussedFrame > i) offset = -250;
+      if (focussedFrame && focussedFrame < i) offset = 250;
+      const pos = scale(i) + offset;
+      const orientation = this.props.horizontal ? { left: `${pos}px`, top: `${this.props.height - 220}px` } : { top: `${pos}px`, right: 0 };
+
+      return (<Frame
+        {...this.props}
+        z={this.props.cards.length - i}
+        orientation={orientation}
+        hoverHandler={(index) => {
+          // this.props.hoverHandler(index);
+        }}
+        index={i}
+      >
+        {React.cloneElement(this.props.element, { ...ch })}
+      </Frame>);
+    });
+
 
     const svgStyle = {
       pointerEvents: 'none',
@@ -163,7 +188,7 @@ class Stack extends React.Component {
 
     const links = _.flatten(cards.map((c, i) => {
       const targets = tags.filter(t => c.tags.includes(t.key));
-      return targets.map(t => ({ source: c, target: t }));
+      return targets.map((t, j) => ({ source: j, target: i }));
     }));
 
     const tagCircles = tags.map(t =>
@@ -171,9 +196,12 @@ class Stack extends React.Component {
     );
 
     return (
-      <div>
+      <div style={{ width: `${this.props.width}px`, height: `${this.props.height}px` }}>
         <ul className={`row ${styles.stack}`} >
-          {this.props.cards.length > 0 ? Items : <div> No collected cards!</div>}
+          {this.props.cards.length > 0 ? ItemsLeft : <div> No collected cards!</div>}
+        </ul>
+        <ul className={`row ${styles.stack}`} >
+          {this.props.cards.length > 0 ? ItemsRight : <div> No collected cards!</div>}
         </ul>
         <svg style={svgStyle} >
           <g>
@@ -191,13 +219,13 @@ class Stack extends React.Component {
           <g>
             {
               links.map((d) => {
-                const props = this.props.horizontal ? { x1: d.source.pos, y1: 30 } : { y1: 30, x1: d.source.pos };
+                const props = this.props.horizontal ? { x1: positions[d.source], y1: 30 }
+                  : { x1: 30, y1: tags[d.target].y };
+
                 return (<line
                   className={styles.bboxLine}
-                  {
-                  ...props
-                }
-                  x2={d.target.x} y2={d.target.y}
+                  {...props}
+                  x2={tags[d.target].x} y2={tags[d.target].y}
                 />);
               }
             )
@@ -211,8 +239,12 @@ class Stack extends React.Component {
 
 
 Stack.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
   element: PropTypes.element,
   hoverHandler: PropTypes.func,
+  vertical: PropTypes.bool,
+  horizontal: PropTypes.bool,
   cards: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.number.isRequired
   }).isRequired).isRequired
@@ -222,10 +254,10 @@ Stack.defaultProps = {
   cards: [],
   element: <CardFrontPreview />,
   hoverHandler: () => null,
-  scale: () => 0,
-  x: true,
-  y: false,
-  size: 600
+  vertical: true,
+  horizontal: false,
+  width: 800,
+  height: 600
 };
 
 export default Stack;

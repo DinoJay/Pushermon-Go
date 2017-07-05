@@ -88,7 +88,7 @@ class TimeLine extends React.Component {
             cards={this.state.cards}
             width={1200}
             height={800}
-            horizontal
+            vertical
             element={<CardMini />}
             focussedFrame={this.state.focussedFrame}
             hoverHandler={(focussedFrame, cards) => {
