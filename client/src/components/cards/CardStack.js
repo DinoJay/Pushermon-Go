@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
-import * as d3 from 'd3';
-import _ from 'lodash';
-import { Card, CardFrontPreview } from './Card';
+import React, { PropTypes } from "react";
+import * as d3 from "d3";
+import _ from "lodash";
+import { Card, CardFrontPreview } from "./Card";
 
-import { forceSurface } from 'd3-force-surface';
-import styles from './CardStack.scss';
+import { forceSurface } from "d3-force-surface";
+import styles from "./CardStack.scss";
 
 // import dummyData from '../../../../server/dummyData';
 
@@ -14,10 +14,9 @@ import styles from './CardStack.scss';
 // const colors = ['#3f51b5', '#5cc2f1', '#fff59d', '#9993c1', '#9993c1',
 //   '#e88a63', '#91c794', '#565f77', '#9d62c5', '#EA9292', '#7c79ce'];
 
-
 // <li class="stack__item stack__item--current" >
 
-const Frame = (props) => {
+const Frame = props => {
   const pos = {};
   // if (props.horizontal) {
   //   if (props.top) { pos = { left: `${props.pos}px` }; } else pos = { left: `${props.pos}px`, top: 100 };
@@ -25,24 +24,26 @@ const Frame = (props) => {
   //   pos = { top: `${props.pos}px`, right: props.right ? 0 : null };
   // }
 
-
   const style = {
     opacity: 1,
-    pointerEvents: 'auto',
-    position: 'absolute',
+    pointerEvents: "auto",
+    position: "absolute",
     ...props.orientation
     // zIndex: z,
     // transform: `translate3d(${props.x}, ${props.y}px, ${props.z}px)`
     // left: `${props.x}px`,
   };
-  const trans = { transition: `0.2s ${props.horizontal ? 'left' : 'top'}, 0.2s background-position, 0.1s border-color` };
+  const trans = {
+    transition: `0.2s ${props.horizontal
+      ? "left"
+      : "top"}, 0.2s background-position, 0.1s border-color`
+  };
 
   return (
     <li
       className={styles.stack__item}
       style={{ ...style, ...pos, ...trans }}
-      onMouseEnter={() => props.hoverHandler(props.index)}
-      onMouseLeave={() => props.hoverHandler(null)}
+      onClick={() => props.hoverHandler(props.index)}
     >
       {props.children}
     </li>
@@ -65,7 +66,6 @@ Frame.defaultProps = {
   children: <Card />
 };
 
-
 class Stack extends React.Component {
   constructor(props) {
     super(props);
@@ -73,47 +73,65 @@ class Stack extends React.Component {
     const height = props.height;
     const offsetX = 200;
     const tagBox = [
-      { from: { x: (width / 2) - offsetX, y: 0 }, to: { x: (width / 2) - offsetX, y: height } },
-      { from: { x: (width / 2) + offsetX, y: 0 }, to: { x: (width / 2) + offsetX, y: height } },
-      { from: { x: (width / 2) - offsetX, y: height }, to: { x: (width / 2) + offsetX, y: height } },
-      { from: { x: (width / 2) - offsetX, y: 0 }, to: { x: (width / 2) + offsetX, y: 0 } }
+      {
+        from: { x: width / 2 - offsetX, y: 0 },
+        to: { x: width / 2 - offsetX, y: height }
+      },
+      {
+        from: { x: width / 2 + offsetX, y: 0 },
+        to: { x: width / 2 + offsetX, y: height }
+      },
+      {
+        from: { x: width / 2 - offsetX, y: height },
+        to: { x: width / 2 + offsetX, y: height }
+      },
+      {
+        from: { x: width / 2 - offsetX, y: 0 },
+        to: { x: width / 2 + offsetX, y: 0 }
+      }
     ];
 
     function aggregateByTags(data) {
-      const spreadData = _.flatten(data.map(d => d.tags.map((t) => {
-        const copy = _.cloneDeep(d);
-        copy.tag = t;
-        return copy;
-      })));
-      return d3.nest()
-    .key(d => d.tag)
-    .entries(spreadData);
+      const spreadData = _.flatten(
+        data.map(d =>
+          d.tags.map(t => {
+            const copy = _.cloneDeep(d);
+            copy.tag = t;
+            return copy;
+          })
+        )
+      );
+      return d3.nest().key(d => d.tag).entries(spreadData);
     }
 
-    const tags = aggregateByTags(props.cards)
-      .map((d) => {
-        d.r = 50;
-        d.x = width / 2;
-        d.y = height / 2;
-        return d;
-      });
+    const allCards = props.firstCluster.concat(props.secCluster);
 
-    this.state = { tags, tagBox };
+    const tags = aggregateByTags(allCards).map(d => {
+      d.r = 50;
+      d.x = width / 2;
+      d.y = height / 2;
+      return d;
+    });
+
+    this.state = { allCards, tags, tagBox };
   }
 
   componentDidMount() {
-    const simulation = d3.forceSimulation(this.state.tags)
-      .force('collide', d3.forceCollide(d => d.r).strength(0.1))
-      .alphaMin(0.3)
+    const simulation = d3
+      .forceSimulation(this.state.tags)
+      .force("collide", d3.forceCollide(d => d.r).strength(0.4))
+      .alphaMin(0.2)
       // .force('charge', d3.forceManyBody(200))
-    // .force('bbox', forceContainer([[0, yOffset], [width, height - yOffset]]))
-    .force('container', forceSurface()
-      .surfaces(this.state.tagBox)
-      .oneWay(false)
-    .radius(d => d.r)
-    )
-    // .force('center', d3.forceCenter(width / 2, height / 2))
-    .on('end', () => this.setState({ tags: simulation.nodes() }));
+      // .force('bbox', forceContainer([[0, yOffset], [width, height - yOffset]]))
+      .force(
+        "container",
+        forceSurface()
+          .surfaces(this.state.tagBox)
+          .oneWay(false)
+          .radius(d => d.r)
+      )
+      // .force('center', d3.forceCenter(width / 2, height / 2))
+      .on("end", () => this.setState({ tags: simulation.nodes() }));
   }
 
   // shouldComponentUpdate() {
@@ -121,115 +139,159 @@ class Stack extends React.Component {
   // }
 
   render() {
-    const cards = this.props.cards;
     const tags = this.state.tags;
     const tagBox = this.state.tagBox;
-    console.log('tags', tags);
     const size = this.props.horizontal ? this.props.width : this.props.height;
+    const allCards = this.state.allCards;
 
-    const dom = d3.range(0, cards.length);
-    const scale = d3.scaleBand(dom)
-        .domain(dom)
-        .range([0, size]);
+    const firstScale = d3
+      .scaleBand()
+      .domain(d3.range(0, this.props.firstCluster.length))
+      .range([0, size]);
 
-    const positions = [];
-    const ItemsLeft = this.props.cards.map((ch, i) => {
+    const firstItems = this.props.firstCluster.map((c, i) => {
       let offset = 0;
       const focussedFrame = this.props.focussedFrame;
       if (focussedFrame && focussedFrame > i) offset = -250;
       if (focussedFrame && focussedFrame < i) offset = 250;
-      const pos = scale(i) + offset;
-      positions.push(pos);
-
-      const orientation = this.props.horizontal ? { left: `${pos}px` } : { top: `${pos}px` };
-
-      return (<Frame
-        {...this.props}
-        z={this.props.cards.length - i}
-        orientation={orientation}
-        hoverHandler={(index) => {
-          // this.props.hoverHandler(index);
-        }}
-        index={i}
-      >
-        {React.cloneElement(this.props.element, { ...ch })}
-      </Frame>);
+      c.pos = firstScale(i) + offset;
+      return c;
     });
 
-    const ItemsRight = this.props.cards.map((ch, i) => {
+    const FirstCluster = firstItems.map((ch, i) => {
+      const orientation = this.props.horizontal
+        ? { left: `${ch.pos}px` }
+        : { top: `${ch.pos}px` };
+      return (
+        <Frame
+          {...this.props}
+          z={firstItems.length - 1}
+          orientation={orientation}
+          hoverHandler={index => {
+            this.props.hoverHandler(index);
+          }}
+          index={i}
+        >
+          {React.cloneElement(this.props.element, { ...ch })}
+        </Frame>
+      );
+    });
+
+    const secScale = d3
+      .scaleBand()
+      .domain(d3.range(0, this.props.secCluster.length))
+      .range([0, size]);
+
+    const secItems = this.props.secCluster.map((c, i) => {
       let offset = 0;
       const focussedFrame = this.props.focussedFrame;
       if (focussedFrame && focussedFrame > i) offset = -250;
       if (focussedFrame && focussedFrame < i) offset = 250;
-      const pos = scale(i) + offset;
-      const orientation = this.props.horizontal ? { left: `${pos}px`, top: `${this.props.height - 220}px` } : { top: `${pos}px`, right: 0 };
-
-      return (<Frame
-        {...this.props}
-        z={this.props.cards.length - i}
-        orientation={orientation}
-        hoverHandler={(index) => {
-          // this.props.hoverHandler(index);
-        }}
-        index={i}
-      >
-        {React.cloneElement(this.props.element, { ...ch })}
-      </Frame>);
+      c.pos = secScale(i) + offset;
+      return c;
     });
 
+    const SecCluster = secItems.map((ch, i) => {
+      let offset = 0;
+      const focussedFrame = this.props.focussedFrame;
+      if (focussedFrame && focussedFrame > i) offset = -250;
+      if (focussedFrame && focussedFrame < i) offset = 250;
+      const pos = secScale(i) + offset;
+      let orientation = { top: `${pos}px`, right: 0 };
+      if (this.props.horizontal) {
+        orientation = { left: `${pos}px`, top: `${this.props.height - 220}px` };
+      }
+
+      return (
+        <Frame
+          {...this.props}
+          z={secItems.length - i}
+          orientation={orientation}
+          hoverHandler={index => {
+            this.props.hoverHandler(index);
+          }}
+          index={i}
+        >
+          {React.cloneElement(this.props.element, { ...ch })}
+        </Frame>
+      );
+    });
 
     const svgStyle = {
-      pointerEvents: 'none',
+      pointerEvents: "none",
       width: `${this.props.width}px`,
       height: `${this.props.height}px`,
       left: 0,
       top: 0
     };
 
-    const links = _.flatten(cards.map((c, i) => {
-      const targets = tags.filter(t => c.tags.includes(t.key));
-      return targets.map((t, j) => ({ source: j, target: i }));
-    }));
-
-    const tagCircles = tags.map(t =>
-      <circle r={t.r} cx={t.x} cy={t.y} fill="blue" />
+    const links = _.flatten(
+      allCards.map(c => {
+        const targets = tags.filter(t => c.tags.includes(t.key));
+        const l = targets.map(t => ({ source: t, target: c }));
+        return l;
+      })
     );
 
     return (
-      <div style={{ width: `${this.props.width}px`, height: `${this.props.height}px` }}>
-        <ul className={`row ${styles.stack}`} >
-          {this.props.cards.length > 0 ? ItemsLeft : <div> No collected cards!</div>}
+      <div
+        style={{
+          width: `${this.props.width}px`,
+          height: `${this.props.height}px`
+        }}
+      >
+        <ul className={`row ${styles.stack}`}>
+          {this.props.firstCluster.length > 0
+            ? FirstCluster
+            : <div> No collected cards!</div>}
         </ul>
-        <ul className={`row ${styles.stack}`} >
-          {this.props.cards.length > 0 ? ItemsRight : <div> No collected cards!</div>}
+        <ul className={`row ${styles.stack}`}>
+          {this.props.secCluster.length > 0
+            ? SecCluster
+            : <div> No collected cards!</div>}
         </ul>
-        <svg style={svgStyle} >
+        <svg style={svgStyle}>
           <g>
-            {tagCircles}
+            {links.map(d => {
+              const offset = 200;
+              const props = this.props.horizontal
+                ? { x1: d.target.pos, y1: offset }
+                : { x1: offset, y1: d.target.pos };
+              return (
+                <line
+                  className={styles.bboxLine}
+                  {...props}
+                  x2={d.source.x}
+                  y2={d.source.y}
+                />
+              );
+            })}
           </g>
           <g>
             {tagBox.map(d =>
               <line
                 className={styles.bboxLine}
-                x1={d.from.x} y1={d.from.y}
-                x2={d.to.x} y2={d.to.y}
+                x1={d.from.x}
+                y1={d.from.y}
+                x2={d.to.x}
+                y2={d.to.y}
               />
             )}
           </g>
           <g>
-            {
-              links.map((d) => {
-                const props = this.props.horizontal ? { x1: positions[d.source], y1: 30 }
-                  : { x1: 30, y1: tags[d.target].y };
-
-                return (<line
-                  className={styles.bboxLine}
-                  {...props}
-                  x2={tags[d.target].x} y2={tags[d.target].y}
-                />);
-              }
-            )
-            }
+            {tags.map(t =>
+              <g transform={`translate(${t.x}, ${t.y})`}>
+                <circle r={t.r} fill="blue" />
+                <text
+                  textAnchor="middle"
+                  stroke="#51c5cf"
+                  strokeWidth="1px"
+                  dy=".3em"
+                >
+                  {t.key}
+                </text>
+              </g>
+            )}
           </g>
         </svg>
       </div>
@@ -237,22 +299,23 @@ class Stack extends React.Component {
   }
 }
 
-
 Stack.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  focussedFrame: PropTypes.number,
   element: PropTypes.element,
   hoverHandler: PropTypes.func,
   vertical: PropTypes.bool,
   horizontal: PropTypes.bool,
-  cards: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.number.isRequired
-  }).isRequired).isRequired
+  firstCluster: PropTypes.array,
+  secCluster: PropTypes.array
 };
 
 Stack.defaultProps = {
-  cards: [],
-  element: <CardFrontPreview />,
+  firstCluster: [],
+  secCluster: [],
+  focussedFrame: null,
+  element: null,
   hoverHandler: () => null,
   vertical: true,
   horizontal: false,
